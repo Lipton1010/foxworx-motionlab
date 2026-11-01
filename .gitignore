@@ -1,0 +1,64 @@
+# graft's local graph cache — regenerable, not committed (run `graft build`).
+/graft/
+
+# Default to excluding local data; explicitly allow application source.
+/*
+!/.gitignore
+!/.ignore
+!/README.md
+!/launch.py
+!/runtime-requirements.txt
+!/Build Desktop.ps1
+!/Build Portable.ps1
+!/Create Desktop Shortcut.ps1
+!/Open ComfyUI.cmd
+!/Start Image Studio.cmd
+!/Start Image Studio.ps1
+!/Stop Image Studio.cmd
+!/Stop Image Studio.ps1
+!/desktop/
+!/portable/
+!/tests/
+!/runtime/
+/runtime/*
+!/runtime/qwen-prompt-rewrite/
+/runtime/qwen-prompt-rewrite/*
+!/runtime/qwen-prompt-rewrite/pe_core.py
+!/runtime/custom_nodes/
+/runtime/custom_nodes/*
+!/runtime/custom_nodes/moss-image/
+/runtime/custom_nodes/moss-image/*
+!/runtime/custom_nodes/moss-image/*.py
+!/runtime/custom_nodes/moss-image/pyproject.toml
+!/runtime/custom_nodes/moss-image/LICENSE
+**/bin/
+**/obj/
+**/__pycache__/
+**/.venv/
+**/node_modules/
+**/*.pyc
+**/.env
+**/.env.*
+**/*.key
+**/*.pem
+**/*.pfx
+**/*.safetensors
+**/*.ckpt
+**/*.gguf
+**/*.pt
+**/*.pth
+**/*.mp4
+**/*.mov
+**/*.webm
+**/*.wav
+**/*.log
+/portable/TEST RESULTS.txt
+**/*.png
+**/*.jpg
+**/*.jpeg
+**/*.gif
+**/*.webp
+**/*.bmp
+**/*.tif
+**/*.tiff
+!/desktop/Assets/ImageStudio.png

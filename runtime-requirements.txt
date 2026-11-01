@@ -1,0 +1,15 @@
+# Installed into runtime/packages-0.42.1, ahead of runtime/packages.
+# Shared Python/PyTorch stay in D:/ComfyUI.
+comfyui-frontend-package==1.55.18
+comfyui-workflow-templates==0.11.89
+comfyui-workflow-templates-core==0.3.380
+comfyui-workflow-templates-json==0.1.115
+comfyui-workflow-templates-media-api==0.3.84
+comfyui-workflow-templates-media-video==0.3.101
+comfyui-workflow-templates-media-image==0.3.160
+comfyui-workflow-templates-media-other==0.3.229
+comfyui-workflow-templates-media-assets-01==0.1.48
+comfyui-workflow-templates-media-assets-02==0.1.17
+comfyui-embedded-docs==0.5.14
+comfy-kitchen==0.2.39
+comfy-aimdo==0.5.6
