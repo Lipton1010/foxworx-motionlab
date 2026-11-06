@@ -15,6 +15,7 @@ public partial class MainWindow
     private async void RefinePrompt(object sender, RoutedEventArgs e)
     {
         if (busy) return;
+        string? gpuOwner = null;
         if (builderVideo) { SetStatus("Local AI refinement is available for image prompts only. You can build and edit video prompts directly."); return; }
         try
         {
@@ -39,6 +40,9 @@ public partial class MainWindow
             SetBusy(true); CancelButton.Content = "Cancel refinement"; CancelButton.IsEnabled = true;
             await engine.EnsureStarted(SetStatus);
             token.ThrowIfCancellationRequested();
+            gpuOwner = "rewrite_" + Guid.NewGuid().ToString("N");
+            var admission = await new ProductionClient().Call("gpu-claim", new { owner = gpuOwner, intent = "image-prompt-refinement" }, cancellationToken: token);
+            if (admission["phase"]?.GetValue<string>() != "admitted") throw new IOException("Prompt refinement admission needs reconciliation before starting.");
             SetStatus("Preparing memory for the local prompt rewriter…");
             await engine.ReleaseIdleModels(token);
             string input = Path.Combine(App.Root, "temp", "rewrite-" + Guid.NewGuid().ToString("N") + ".json");
@@ -67,6 +71,7 @@ public partial class MainWindow
             token.ThrowIfCancellationRequested();
             if (string.IsNullOrWhiteSpace(result.prompt)) throw new IOException("The rewriter returned an empty prompt.");
             beforeRefinement = BuiltPrompt.Text; BuiltPrompt.Text = result.prompt; UndoRefinementButton.IsEnabled = true;
+            BuilderDraftState.Text = "AI-refined image draft · review or edit before applying";
             RewriteInfo.Text = "AI refinement ready. " + (!string.IsNullOrWhiteSpace(result.ratio) ? "Suggested aspect ratio: " + result.ratio + ". " : "") + (!string.IsNullOrWhiteSpace(result.follow) ? "Suggested framing reference: " + result.follow + ". " : "") + "Review the prompt; your image settings have not been changed.";
             SetStatus("Prompt refined locally. Review the result before using it.");
         }
@@ -81,6 +86,11 @@ public partial class MainWindow
                 catch (System.ComponentModel.Win32Exception ex) { ShowError(ex); }
             }
             rewriteProcess?.Dispose(); rewriteProcess = null; SetBusy(false); CancelButton.Content = "Cancel generation";
+            if (gpuOwner != null)
+            {
+                try { await new ProductionClient().Call("gpu-release", new { owner = gpuOwner }); }
+                catch (Exception ex) { SetStatus("GPU reservation needs reconciliation: " + ex.Message); }
+            }
             rewriteCancellation?.Dispose(); rewriteCancellation = null;
         }
     }
@@ -88,6 +98,7 @@ public partial class MainWindow
     {
         if (beforeRefinement == null) return;
         BuiltPrompt.Text = beforeRefinement; beforeRefinement = null; UndoRefinementButton.IsEnabled = false;
+        BuilderDraftState.Text = "Previous image draft restored · review before applying";
         RewriteInfo.Text = "Previous draft restored.";
     }
 }

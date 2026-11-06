@@ -1,0 +1,105 @@
+{
+  "blocking": {
+    "kind": "experience",
+    "modalities": [
+      "spatial-plan",
+      "motion",
+      "audio",
+      "action-timing",
+      "body-mechanics"
+    ],
+    "stages": [
+      "scale",
+      "deliver"
+    ],
+    "outcome": "Connected low-detail playback establishes causes, responses, readable action duration, travel paths, occlusion/reappearance, body mechanics and resulting states as well as world/camera positions. The generated sequence is compared with this plan. Correct endpoints or a spatial pass do not override an unreadable action. Inspect critical path crossings and depth/occlusion so characters do not travel through each other or disappear inside crowds; use distinguishable previews when grey objects merge."
+  },
+  "reference_roles": {
+    "kind": "experience",
+    "modalities": [
+      "reference-inspection",
+      "plan-review",
+      "control-pass-inspection"
+    ],
+    "stages": [
+      "scale",
+      "deliver"
+    ],
+    "outcome": "References declare identity/geometry/appearance/style/audio roles, preserved properties, allowed changes and applicable shots. Actual input support is verified. Control passes identify geometry, intentional occluders, effects excluded or separate, and proxy shapes that could leak into footage. Styling preserves the planned framing, scale, count and identity; conflicts are resolved before expansion."
+  },
+  "edit_selection": {
+    "kind": "experience",
+    "modalities": [
+      "source-range-review",
+      "motion",
+      "audio",
+      "source-duration-check"
+    ],
+    "stages": [
+      "scale",
+      "deliver"
+    ],
+    "outcome": "Selected ranges identify exact take hashes, actual source frame counts/rates, valid in/out bounds, purpose and boundary states. Insufficient duration or absent action remains a defect even when review samples are clamped. Trims retain complete action/speech. Assembled neighbors after mixing or grading are reviewed for colour, scale, identity, expression, motion and sound; rejected ranges remain rejected."
+  },
+  "finishing_trial": {
+    "kind": "experience",
+    "modalities": [
+      "draft-final-comparison"
+    ],
+    "stages": [
+      "scale",
+      "deliver"
+    ],
+    "outcome": "A representative small draft has been taken through the proposed finalization/export path and compared for detail, identity, motion and audio changes. Include the likely weak case (for example a distant face), not only an attractive close-up. Draft approval does not approve the changed final bytes."
+  },
+  "resources": {
+    "kind": "technical",
+    "modalities": [
+      "cost-review"
+    ],
+    "stages": [
+      "scale",
+      "deliver"
+    ],
+    "outcome": "Planning distinguishes estimates from actual use and includes trials, rejected takes, targeted retries, selected-take finalization and export. Subscription credits, local compute and time are recorded separately or marked unmeasured, not called free. Unknown finish costs remain visible; any paid work has separately established authorization."
+  },
+  "story": {
+    "kind": "experience",
+    "modalities": [
+      "motion",
+      "audio",
+      "picture-only",
+      "picture-with-sound"
+    ],
+    "stages": [
+      "scale",
+      "deliver"
+    ],
+    "outcome": "A reviewer records the causal action understood from picture alone and from picture with sound, against the current accepted brief. Dialogue may clarify motivation but cannot establish an absent or contradicted action. Current lyrics and selected music fit the current story; earlier-story approval is not inherited. Required props and effects have a visible setup/origin before their consequence."
+  },
+  "motion_audio": {
+    "kind": "experience",
+    "modalities": [
+      "motion",
+      "audio",
+      "mix-listening"
+    ],
+    "stages": [
+      "scale",
+      "deliver"
+    ],
+    "outcome": "Connected action, character persistence and sound agree with intended staging. Listen to the actual mix, including music joins or intentional prelaps, complete phrases, dialogue masking, ambience and endings. Check stems for unplanned gaps separately; ASR, level measurements and sampled frames cannot approve listening or full-speed motion."
+  },
+  "performance": {
+    "kind": "experience",
+    "modalities": [
+      "motion",
+      "audio"
+    ],
+    "stages": [
+      "scale",
+      "deliver"
+    ],
+    "outcome": "Body mechanics, expression, reactions, pacing, speech delivery and music convey the intended emotion naturally in full-speed playback with sound. Recognized words or matching cut positions do not establish performance. Pose-specific fixes are re-evaluated after pose changes. For speaking shots, inspect the selected take with its actual voice timing, internal pauses and mouth visibility; input audio support or ASR alone cannot establish lip sync."
+  }
+}

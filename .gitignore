@@ -62,3 +62,13 @@
 **/*.tif
 **/*.tiff
 !/desktop/Assets/ImageStudio.png
+
+# Private creative writing: prompts, shooting scripts, references, and revisions.
+/episode-scripts/
+
+# Film application sources; runtime weights and generated creative media stay excluded.
+!/Package Production.ps1
+!/graph-host/
+!/runtime/custom_nodes/image-studio-av/
+/runtime/custom_nodes/image-studio-av/*
+!/runtime/custom_nodes/image-studio-av/*.py

@@ -22,8 +22,7 @@ public partial class MainWindow : Window
     protected override void OnSourceInitialized(EventArgs e)
     {
         base.OnSourceInitialized(e);
-        int enabled = 0;
-        DwmSetWindowAttribute(new WindowInteropHelper(this).Handle, 20, ref enabled, sizeof(int));
+        ThemeManager.ApplyTitleBar(this);
     }
 
     private readonly StudioEngine engine = new();
@@ -39,8 +38,12 @@ public partial class MainWindow : Window
 
     public MainWindow()
     {
+        ThemeManager.Initialize();
         InitializeComponent();
+        OutputLibrary.Films = FilmWorkspace;
+        FilmWorkspace.KeyframeRequested += prompt => { PromptBox.Text = prompt; CreateMode.IsChecked = true; WorkspaceTabs.SelectedItem = StudioTab; SetStatus("Film keyframe prompt ready. Generate an image, then adopt it from Library into the selected film shot."); };
         UpdateBuilderMode();
+        BuiltPrompt.TextChanged += (_, _) => { if (BuiltPrompt.IsKeyboardFocusWithin) BuilderDraftState.Text = builderVideo ? "Manual video draft · Apply to text or first-frame video below" : "Manual image draft · Apply to a new image or edit below"; };
         ReferenceList.ItemsSource = references;
         InitializeMediaWorkspace();
         PreviewKeyDown += (_, e) =>
@@ -195,7 +198,6 @@ public partial class MainWindow : Window
             await engine.EnsureStarted(SetStatus);
             SetStatus(currentRequest.Source == null ? "Sending your description to the image engine…" : "Preparing your source image…");
             jobId = await engine.Submit(currentRequest);
-            await File.WriteAllTextAsync(jobPath, JsonSerializer.Serialize(new PendingJob(jobId, currentRequest)));
             CancelButton.IsEnabled = true;
             await WatchJob();
         }
@@ -215,7 +217,7 @@ public partial class MainWindow : Window
             try { path = await engine.Result(jobId, currentVideoRequest != null); queue = await engine.Queue(); failures = 0; }
             catch (HttpRequestException) when (++failures < 5) { SetStatus("Reconnecting to the image engine…"); await Task.Delay(2000); continue; }
             catch (TaskCanceledException) when (++failures < 5) { SetStatus("The image engine is taking longer to respond. Reconnecting…"); await Task.Delay(2000); continue; }
-            catch (IOException) { CompleteJob(); throw; }
+            catch (EngineJobFailedException) { CompleteJob(); throw; }
             if (path != null)
             {
                 await File.WriteAllTextAsync(path + ".json", JsonSerializer.Serialize((object?)currentVideoRequest ?? currentRequest, new JsonSerializerOptions { WriteIndented = true }));
@@ -232,9 +234,8 @@ public partial class MainWindow : Window
             {
                 if (++missing >= 3)
                 {
-                    CompleteJob();
-                    if (cancelled) throw new OperationCanceledException();
-                    throw new IOException("This job is no longer in the engine's queue. Please generate it again.");
+                    if (cancelled) { CompleteJob(); throw new OperationCanceledException(); }
+                    throw new IOException("The saved job is absent from queue/history. Its submission remains unknown; it will not be automatically resubmitted. Reconcile it with the originating engine.");
                 }
             }
             else missing = 0;
@@ -282,7 +283,7 @@ public partial class MainWindow : Window
         string output = Path.Combine(App.Root, "output");
         Directory.CreateDirectory(output);
         var images = new List<GalleryImage>();
-        foreach (var file in new DirectoryInfo(output).EnumerateFiles("*.png", SearchOption.AllDirectories).OrderByDescending(f => f.LastWriteTimeUtc).Take(30))
+        foreach (var file in new DirectoryInfo(output).EnumerateFiles("*.png", SearchOption.AllDirectories).Where(f => ImageLibrary.CanRecycle(output, f.FullName)).OrderByDescending(f => f.LastWriteTimeUtc).Take(30))
             try { images.Add(new(file.FullName, file.Name, LoadBitmap(file.FullName, 160))); } catch (Exception ex) when (ex is IOException or NotSupportedException or FileFormatException) { /* An in-progress output will appear on the next refresh. */ }
         Gallery.ItemsSource = images;
         EmptyGallery.Visibility = images.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
@@ -327,7 +328,7 @@ public partial class MainWindow : Window
     {
         if (rewriteCancellation != null) { e.Cancel = true; SetStatus("Cancel prompt refinement before closing this window."); return; }
         if (busy && jobId == null) { e.Cancel = true; SetStatus("Please wait until the engine has accepted the image before closing."); return; }
-        if (busy && MessageBox.Show(this, "Your generation will keep running in the background. Reopen Image Studio to see the result. Close this window?", "Still generating", MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes) { e.Cancel = true; return; }
+        if (busy && !StudioDialog.Confirm(this, "Your generation will keep running in the background. Reopen Image Studio to see the result. Close this window?", "Still generating")) { e.Cancel = true; return; }
         try { SaveSettings(); } catch (Exception ex) { ShowError(ex); }
         videoTimer.Stop(); VideoPlayer.Close();
     }

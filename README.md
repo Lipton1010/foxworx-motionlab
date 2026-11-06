@@ -2,6 +2,10 @@
 
 Local still-image and video generation with a native Windows desktop app.
 
+For local multi-shot production experiments, see [production checks and resumable
+jobs](desktop/PRODUCTION.md). These optional tools add dependency-aware reuse,
+conservative recovery and media checks; they do not add a longform desktop editor.
+
 ## Desktop 2.1.0 — October 24, 2026
 
 The desktop interface now uses a light workspace, clearer setup panels, larger

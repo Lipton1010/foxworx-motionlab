@@ -1,0 +1,159 @@
+{
+  "status": "UNVERIFIED TEMPLATE \u00e2\u20ac\u201d not approval or production instructions",
+  "task_sha256": "REPLACE_WITH_CURRENT_ACCEPTED_TASK_TOKEN",
+  "blocking": {
+    "scene_reference": null,
+    "connected_preview_reference": null,
+    "coordinate_system": "Name world axes/units so camera changes do not masquerade as character movement",
+    "shots": [
+      {
+        "id": "REPLACE_WITH_SHOT_ID",
+        "viewer_outcome": "What should the viewer understand or feel because of this shot?",
+        "camera": {
+          "transform": null,
+          "projection": null,
+          "lens_and_sensor": null,
+          "aspect": null
+        },
+        "start_state": "Positions, facing, gaze, props and persistent characters",
+        "action": "Visible cause and resulting change",
+        "end_state": "State inherited by the next shot",
+        "next_cut_intent": "Continuous action, motivated viewpoint change or explicit time/space change",
+        "action_beats": [
+          {
+            "trigger": "Visible cause",
+            "response": "Character response and resulting change",
+            "start_frame": null,
+            "end_frame_exclusive": null,
+            "path_and_destination": null,
+            "occlusion_and_reappearance": null,
+            "body_mechanics": "Required locomotion, pose changes and reactions; motivated stillness is valid",
+            "observable_success": "What a viewer must see and understand",
+            "crossings_and_critical_depth_frames": "Check paths against other characters/crowds; record visible occlusion intent and critical frames"
+          }
+        ],
+        "prop_setup": "Visible origin in this or preceding shot before consequence"
+      }
+    ],
+    "review": {
+      "picture_only_readback": null,
+      "picture_with_sound_readback": null,
+      "ambiguous_or_contradicted_actions": [],
+      "status": "unverified",
+      "evidence": null
+    },
+    "control_pass": {
+      "artifact": null,
+      "included_geometry": [],
+      "intentional_occluders": [],
+      "excluded_or_separate_effects": [],
+      "proxy_silhouette_and_depth_review": "unverified"
+    }
+  },
+  "references": [
+    {
+      "artifact": null,
+      "role": "identity | geometry | appearance | style | audio",
+      "applies_to_shots": [],
+      "preserve": [],
+      "may_change": [],
+      "input_support": "unverified",
+      "composition_comparison": {
+        "before": null,
+        "after": null,
+        "framing_scale_count_identity": "unverified"
+      }
+    }
+  ],
+  "selected_ranges": [
+    {
+      "shot_id": "REPLACE_WITH_SHOT_ID",
+      "take_reference": null,
+      "source_fps": null,
+      "in_frame": null,
+      "out_frame_exclusive": null,
+      "selection_reason": "Why this range works",
+      "continuity_after_trim": "unverified",
+      "complete_action_and_speech": "unverified",
+      "actual_source_frame_count": null,
+      "source_bounds_and_required_duration": "unverified; clamped review samples do not prove adequacy",
+      "neighbor_review": {
+        "colour_scale_identity_expression": "unverified",
+        "motion_audio": "unverified",
+        "evidence": null
+      }
+    }
+  ],
+  "repair_trials": [
+    {
+      "observed_defect": "Observable problem in actual footage",
+      "hypothesis": "Which input, blocking, timing or edit choice caused it?",
+      "bounded_change": "Change only what is needed to test that explanation",
+      "retry_allowance": "Default total two generated repair candidates per defect unless the current task sets another limit",
+      "result_reference": null,
+      "result": "unverified",
+      "defect_id": "Stable ID shared across prompt/seed revisions for this defect",
+      "owner": "blocking | control pass | reference | take | edit | mix",
+      "attempts_used": 0,
+      "success_criterion": null,
+      "stop_and_escalate": "Budget exhausted or same failure persists; present failed evidence and specific alternatives. Unknown submission must be reconciled before another render.",
+      "pose_applicability": "Conditions under which a fix applies; re-evaluate when pose changes"
+    }
+  ],
+  "finishing_trial": {
+    "draft_reference": null,
+    "finished_reference": null,
+    "path_and_settings": "Proposed finalization/export path, without selecting new tools by default",
+    "representative_risk": "Small/distant faces, wide geography, fast motion or other likely failure",
+    "comparison": "unverified"
+  },
+  "audio_plan": {
+    "generated_clip_music": "Inspect and handle explicitly; a new bed must not merely hide unwanted transients",
+    "dialogue": "Preserve accepted voice identity, complete words and natural releases",
+    "continuity": "Review continuous ambience, transitions, score and effects against connected picture",
+    "current_story_and_lyrics": {
+      "accepted_story_reference": null,
+      "lyrics_reference": null,
+      "fit": "unverified"
+    },
+    "music_edit": {
+      "source_reference": null,
+      "chosen_structure_and_reason": null,
+      "complete_phrases": "unverified",
+      "entry_anchor": {
+        "shot_id": null,
+        "offset_samples": null,
+        "sample_rate": null,
+        "relationship_to_picture_cut": "on-cut | intentional prelap | follows cut"
+      },
+      "joins_fades_ducking_and_ending_listening": "unverified"
+    },
+    "stem_coverage": {
+      "allowed_quiet_intervals": [],
+      "measurement": null,
+      "listening": "unverified"
+    },
+    "final_mix_review": {
+      "artifact": null,
+      "wording": "unverified",
+      "delivery_intelligibility_masking": "unverified",
+      "transitions_and_emotional_fit": "unverified",
+      "loudness_and_peak_measurements": null,
+      "evidence": null,
+      "selected_take_mouth_timing_and_pauses": "unverified"
+    }
+  },
+  "resources": {
+    "currency_or_units": null,
+    "draft_estimates": [],
+    "finishing_estimates": [],
+    "retry_allowance": null,
+    "actual_use_and_charges": [],
+    "subscriptions": "unallocated",
+    "local_compute": "unmeasured",
+    "elapsed_time": "unmeasured",
+    "paid_authorization": "Not granted by this template"
+  },
+  "binding_instruction": "Replace nulls with measured records or explicit unverified findings. Add the plan AND every material referenced file as separate hashed candidate.dependencies entries; the gate does not recursively follow references hidden inside this JSON. Record and review against the current task. This template itself cannot pass a real review.",
+  "process_revision": "2026-11-03 live integration; see FILM_PROCESS.md"
+}

@@ -70,8 +70,19 @@ public partial class MainWindow
             models = ModelCatalog.Read(info, File.Exists(Path.Combine(App.Root, "models", "moss-image-base", "install-manifest.json")));
             loraFiles = ModelCatalog.Options(info, "LoraLoader", "lora_name");
             ModelList.ItemsSource = models; LoraLibrary.ItemsSource = loraFiles.Length > 0 ? loraFiles : new[] { "No LoRAs installed yet." };
+            FilmWorkspace.SetModels(models);
             ModelsSummary.Text = $"{models.Count(x => x.Ready && !x.Video)} image models · {models.Count(x => x.Ready && x.Video)} video models · {loraFiles.Length} LoRAs";
             RestoreImageChoice(); RestoreVideoChoice();
+            RefreshModelUsage();
+        }
+        catch
+        {
+            ModelsSummary.Text = "Engine catalog unavailable · saved model and LoRA choices are preserved. Complete engine setup, then Refresh library.";
+            if (models.Count == 0)
+            {
+                ImageModelHint.Text = VideoModelHint.Text = "Engine is unavailable. Planning and imported-media editing remain available in Films.";
+            }
+            throw;
         }
         finally { RefreshModelsButton.IsEnabled = !busy; }
     }
@@ -94,6 +105,19 @@ public partial class MainWindow
         workspace.VideoShape = VideoShapeBox.SelectedIndex; workspace.VideoDuration = VideoDurationBox.SelectedIndex;
         workspace.AnimateImage = VideoImageMode.IsChecked == true;
         workspace.Save(workspacePath);
+        RefreshModelUsage();
+    }
+    private void RefreshModelUsage()
+    {
+        ModelList.ItemsSource = models.Select(model => new
+        {
+            model.Name, model.Description, model.Id, model.Status,
+            SelectionSummary = string.Join(" · ", workspace.Workflows.Where(w => w.Value.Model == model.Id).Select(w => w.Key switch
+            {
+                "image:create" => "Selected for image creation", "image:edit" => "Selected for image editing",
+                "video:text" => "Selected for text video", "video:image" => "Selected for first-frame video", _ => w.Key
+            }))
+        }).ToArray();
     }
     private void SaveWorkspaceSafely() { try { SaveWorkspace(); } catch (Exception ex) { ShowError(ex); } }
 
@@ -258,7 +282,6 @@ public partial class MainWindow
             await engine.EnsureStarted(SetStatus);
             SetStatus("Preparing your video…");
             jobId = await engine.SubmitVideo(currentVideoRequest);
-            await File.WriteAllTextAsync(jobPath, JsonSerializer.Serialize(new PendingJob(jobId, null, currentVideoRequest)));
             CancelButton.IsEnabled = true;
             await WatchJob();
         }
@@ -271,7 +294,7 @@ public partial class MainWindow
     {
         string output = Path.Combine(App.Root, "output");
         VideoGallery.ItemsSource = new DirectoryInfo(output).EnumerateFiles("*", SearchOption.AllDirectories)
-            .Where(f => ImageLibrary.IsVideo(f.FullName)).OrderByDescending(f => f.LastWriteTimeUtc).Take(40)
+            .Where(f => ImageLibrary.IsVideo(f.FullName) && ImageLibrary.CanRecycle(output, f.FullName)).OrderByDescending(f => f.LastWriteTimeUtc).Take(40)
             .Select(f => new VideoItem(f.FullName, f.Name, $"{f.Extension.TrimStart('.').ToUpperInvariant()} · {f.Length / 1048576.0:F1} MB", MediaThumbnail.Load(f.FullName))).ToArray();
         EmptyVideoLibrary.Visibility = VideoGallery.Items.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
     }

@@ -17,6 +17,6 @@ sys.argv = [str(SOURCE / 'main.py'), '--listen', '127.0.0.1', '--port', '8193',
             '--temp-directory', str(ROOT / 'temp'), '--user-directory', str(ROOT / 'user'),
             '--database-url', 'sqlite:///' + (ROOT / 'user/studio.db').as_posix(),
             '--extra-model-paths-config', str(ROOT / 'extra_model_paths.yaml'),
-            '--disable-all-custom-nodes', '--whitelist-custom-nodes', 'moss-image', '--disable-api-nodes', '--preview-method', 'none',
+            '--disable-all-custom-nodes', '--whitelist-custom-nodes', 'moss-image', 'image-studio-av', '--disable-api-nodes', '--preview-method', 'none',
             '--vram-headroom', '2', '--cache-none'] + sys.argv[1:]
 runpy.run_path(str(SOURCE / 'main.py'), run_name='__main__')

@@ -46,7 +46,18 @@ try
     Check(ImageLibrary.CanRecycle(output, video), "Generated videos should support the same safe deletion as images.");
     ImageLibrary.Recycle(output, video);
     Check(!File.Exists(video) && !File.Exists(video + ".json"), "Video deletion must remove the video and sidecar from their actual folder.");
-    Console.WriteLine($"Passed {checks} recycle checks; only newly created test fixtures were recycled.");
+foreach (var managed in new[] { "films", "production-jobs" })
+{
+    string protectedPath = System.IO.Path.Combine(output, managed, "protected.png");
+    System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(protectedPath)!);
+    System.IO.File.WriteAllText(protectedPath, "Synthetic protected asset");
+    Check(!ImageLibrary.CanRecycle(output, protectedPath), "Managed " + managed + " stays protected even with a stale gallery path.");
+    try { ImageLibrary.Recycle(output, protectedPath); throw new Exception("Managed asset was accepted for recycling."); }
+    catch (System.IO.IOException) { Check(System.IO.File.Exists(protectedPath), "The actual recycle boundary preserves " + managed + " bytes."); }
+    System.IO.File.Delete(protectedPath);
+    System.IO.Directory.Delete(System.IO.Path.GetDirectoryName(protectedPath)!);
+}
+Console.WriteLine($"Passed {checks} recycle checks; only newly created test fixtures were recycled.");
 }
 finally
 {

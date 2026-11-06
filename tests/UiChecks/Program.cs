@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Runtime.InteropServices;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Automation;
 
 internal static class Program
 {
@@ -148,12 +149,13 @@ internal static class Program
         {
             for (int attempt = 0; attempt < 100; attempt++)
             {
-                var dialog = FindWindow("#32770", title);
-                GetWindowThreadProcessId(dialog, out var processId);
-                if (dialog != IntPtr.Zero && processId == Environment.ProcessId)
+                var dialog = AutomationElement.RootElement.FindFirst(TreeScope.Children, new AndCondition(
+                    new PropertyCondition(AutomationElement.ProcessIdProperty, Environment.ProcessId),
+                    new PropertyCondition(AutomationElement.NameProperty, title)));
+                if (dialog != null)
                 {
-                    PostMessage(dialog, 0x0111, new IntPtr(6), IntPtr.Zero);
-                    return;
+                    var button = dialog.FindFirst(TreeScope.Descendants, new PropertyCondition(AutomationElement.AutomationIdProperty, "Confirm"));
+                    if (button?.GetCurrentPattern(InvokePattern.Pattern) is InvokePattern invoke) { invoke.Invoke(); return; }
                 }
                 Thread.Sleep(50);
             }

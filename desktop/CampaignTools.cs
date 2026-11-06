@@ -164,6 +164,7 @@ public partial class MainWindow
         BuilderVideoFields.Visibility = VideoPromptActions.Visibility = builderVideo ? Visibility.Visible : Visibility.Collapsed;
         BuilderIntro.Text = builderVideo ? "Describe the scene, movement, and sound." : "Set the subject, look, and details that matter.";
         BuilderOutputHint.Text = builderVideo ? "Edit freely, then send your prompt to Videos." : "Edit freely. Refine when you're ready.";
+        BuilderDraftState.Text = builderVideo ? "Video draft · editable · apply to text or first-frame video below" : "Image draft · editable · apply to a new image or edit below";
         BuilderPreserveLabel.Content = builderVideo ? "Details to keep consistent throughout" : "For edits: what should stay unchanged?";
         RewriteInfo.Text = builderVideo
             ? "Build and edit video prompts here. Local AI refinement is available for image prompts only. Choose duration and a first frame, if needed, in Videos."
@@ -207,6 +208,7 @@ public partial class MainWindow
         try
         {
             BuiltPrompt.Text = ComposePrompt(ReadBuilder()); beforeRefinement = null; UndoRefinementButton.IsEnabled = false;
+            BuilderDraftState.Text = builderVideo ? "Built from video fields · editable draft · choose an Apply destination" : "Built from image fields · editable draft · choose an Apply destination";
             SetStatus(builderVideo ? "Video prompt built. Review it, then choose text-to-video or image-to-video." : "Prompt built. Review it, then choose new image or edit.");
         }
         catch (Exception ex) { ShowError(ex); }

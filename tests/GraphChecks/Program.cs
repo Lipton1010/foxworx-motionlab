@@ -133,4 +133,20 @@ if (args.Length > 0)
     foreach (var (name, graph) in new[] { ("moss", moss), ("krea", krea), ("ltx-text", (JsonNode)ltxText), ("ltx-image", ltxImage), ("minimax", minimax), ("qwen", withLoras) })
         System.IO.File.WriteAllText(System.IO.Path.Combine(args[0], name + ".json"), graph.ToJsonString(new JsonSerializerOptions { WriteIndented = true }));
 }
+Check(JsonNode.DeepEquals(JsonNode.Parse("{\"n\":1}"), JsonNode.Parse("{\"n\":1.0}")), "Create history matching tolerates equivalent engine numeric normalization.");
+var flexRequest = new VideoRequest("Synthetic graph check", "", 1, 768, 448, 5, "minimax_h3_fl2va_pruned_int8_convrot.safetensors", Loras: [new("pika_h3_flex_fl2va_comfy_bf16.safetensors", 1)]);
+var flexGraph = GenerationPipelines.BuildVideo(flexRequest);
+Check(flexGraph["sampler"]!["inputs"]!["sampler_name"]!.GetValue<string>() == "lcm", "Selecting the installed Pika adapter uses its calibrated sampler in Create as well as Films.");
+Check(flexGraph["sigmas"]!["class_type"]!.GetValue<string>() == "ManualSigmas", "Pika uses its full manual sigma schedule rather than a generic step count.");
+var guided = GenerationPipelines.BuildVideo(flexRequest with { GuideVideo = "tail.mkv" }, uploadedGuide: "staged-tail.mkv");
+Check(guided["guide_video"]!["inputs"]!["file"]!.GetValue<string>() == "staged-tail.mkv" && guided["tail_guide"]!["class_type"]!.GetValue<string>() == "MiniMaxH3AddGuide", "Exact continuation guides enter the same shared C# graph authority.");
+var shortRepair = GenerationPipelines.BuildVideo(flexRequest with { LastFrame = "end.png", LastFrameAt = 23 }, uploadedLastFrame: "staged-end.png");
+Check(shortRepair["last_guide"]!["inputs"]!["frame_idx"]!.GetValue<int>() == 23 && shortRepair["conditioning"]!["inputs"]!["last_frame"] == null,
+    "Short repair endpoint is anchored inside the retained 24-frame interval, not at the end of the longer generation.");
+var layeredRepair = GenerationPipelines.BuildVideo(flexRequest with { LastFrame = "end.png", LastFrameAt = 23, AudioGuide = "voice.wav", GuideVideo = "tail.mkv" },
+    uploadedLastFrame: "staged-end.png", uploadedAudio: "staged-voice.wav", uploadedGuide: "staged-tail.mkv");
+Check(layeredRepair["guide"]!["inputs"]!["positive"]![0]!.GetValue<string>() == "last_guide" && layeredRepair["tail_guide"]!["inputs"]!["positive"]![0]!.GetValue<string>() == "guide",
+    "Audio and continuation conditioning preserve the explicit retained-range endpoint guide.");
+try { GenerationPipelines.BuildVideo(flexRequest with { LastFrameAt = 500 }, uploadedLastFrame: "end.png"); Check(false, "Out-of-range endpoint must fail."); }
+catch (ArgumentException) { Check(true, "Out-of-range retained endpoint fails before submission."); }
 Console.WriteLine($"Passed {checks} graph, workflow persistence, and prompt-builder checks.");

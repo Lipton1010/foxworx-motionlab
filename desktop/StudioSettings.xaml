@@ -1,0 +1,9 @@
+<UserControl x:Class="ImageStudio.StudioSettings" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ScrollViewer VerticalScrollBarVisibility="Auto"><StackPanel MaxWidth="720" HorizontalAlignment="Left" Margin="8">
+    <TextBlock Text="Appearance" FontSize="23" FontWeight="SemiBold"/><TextBlock Text="Applies immediately. System follows Windows; high contrast follows your accessibility settings." Margin="0,8,0,16" Foreground="{DynamicResource MutedBrush}"/>
+    <ComboBox x:Name="Appearance" Width="260" HorizontalAlignment="Left" SelectionChanged="AppearanceChanged" AutomationProperties.Name="Appearance"><ComboBoxItem Content="Dark"/><ComboBoxItem Content="Light"/><ComboBoxItem Content="System"/></ComboBox>
+    <TextBlock Text="Readiness and storage" FontSize="23" FontWeight="SemiBold" Margin="0,28,0,10"/><Button Content="Check film tools" Click="CheckReadiness" HorizontalAlignment="Left"/><TextBox x:Name="Readiness" IsReadOnly="True" TextWrapping="Wrap" AcceptsReturn="True" MinHeight="130" Margin="0,12" AutomationProperties.Name="Film readiness"/>
+    <TextBlock Text="FFmpeg executable"/><TextBox x:Name="FFmpeg" AutomationProperties.Name="FFmpeg executable path" Margin="0,6,0,12"/><TextBlock Text="FFprobe executable"/><TextBox x:Name="FFprobe" AutomationProperties.Name="FFprobe executable path" Margin="0,6,0,12"/><Button Content="Save media tool paths" Click="SaveTools" HorizontalAlignment="Left"/>
+    <TextBlock x:Name="Storage" Margin="0,24" Foreground="{DynamicResource MutedBrush}"/><TextBlock x:Name="Status" AutomationProperties.LiveSetting="Polite"/>
+  </StackPanel></ScrollViewer>
+</UserControl>

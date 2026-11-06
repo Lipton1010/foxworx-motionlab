@@ -1,0 +1,184 @@
+{
+  "schema": 1,
+  "checked": "2026-11-05",
+  "reference_machine": "RTX 4090 24564 MiB, 32 GB RAM; native Windows ComfyUI 0.42.1, torch 2.13.0+cu130",
+  "text_preview": {
+    "status": "execution verified at reference settings",
+    "profile": "Pika Flex FL2VA, LCM, six manual sigma intervals, strength 1.0",
+    "dimensions": [
+      768,
+      448
+    ],
+    "frames": 124,
+    "fps": 24,
+    "audio": "stereo 32000 Hz",
+    "backend_seconds": 44.13,
+    "artifact_sha256": "718c3011b0cb92455388bbcf4691387ee0aa28956e11ce19053429d04cc1688c"
+  },
+  "persisted_finish": {
+    "status": "execution and full decode verified at reference settings",
+    "method": "AV companion load, trilinear latent interpolation, two-step refinement; not a learned upscaler",
+    "dimensions": [
+      1280,
+      768
+    ],
+    "backend_seconds": 65.04,
+    "artifact_sha256": "caef08f20ce6400ca39ed3c2d6464f64c7d97900ea403e060501b4a723714549",
+    "performance_review": "unverified; inspect moving picture and listen"
+  },
+  "restart_roundtrip": {
+    "status": "both decoded branches exactly equal after engine restart, no sampler",
+    "video_sha256": "76937917dd6f99fe191b35afc958e08e89cc242a5c09dd49ec3dd0aa3883dbef",
+    "audio_sha256": "1b3398dc0c6b355b58b059c423573c471239bd0a827d6a1ad2f8196d6ebfcc84"
+  },
+  "limits": [
+    "Current installed runtime/model/node files are checked again when preparing a production item.",
+    "First-frame, first/last-frame, last-frame-only, audio guide, continuation and retained-range repairs have bounded reference execution evidence. This does not certify continuity, seams, speech or artistic quality.",
+    "The voice-guide wording diagnostic failed: independent ASR recognized extra words beyond the intended sentence. Short audio guides only constrain their covered interval; uncovered audio remains unverified. No by-ear judgment is claimed.",
+    "Extend/Bridge/Fill/Retake preserve explicit range/placement bindings. Control and Ref2VA still lack a verified film-interface route; audio-only Extend has no picture-hold policy.",
+    "The finish remains latent interpolation plus refinement, not learned upscaling. No motion, performance, speech or listening approval is inferred from execution, decoding or numerical probes."
+  ],
+  "controlled_trials": {
+    "connected-third": {
+      "status": "execution and full decode verified; perceptual approval not inferred",
+      "prompt_id": "04a10e8b-639b-4726-a78d-5f32f967f08d",
+      "artifact_sha256": "2e7c38f733c4036b00d7204fbb4675cce8b326d5cd810cadb6d67329c51937b1",
+      "dimensions": [
+        768,
+        448
+      ],
+      "fps": "24/1",
+      "frames": 124
+    },
+    "finish": {
+      "status": "execution and full decode verified; perceptual approval not inferred",
+      "prompt_id": "22d8341a-9866-459c-8f69-b776560eea92",
+      "artifact_sha256": "88d2fd22c3bd8260ee29d3f5d0757954c2325bbf48e2df30b1118b8281972c76",
+      "dimensions": [
+        1280,
+        768
+      ],
+      "fps": "24/1",
+      "frames": 124
+    },
+    "first-frame": {
+      "status": "execution and full decode verified; perceptual approval not inferred",
+      "prompt_id": "55486958-a445-46e8-9c15-a411e3277c9f",
+      "artifact_sha256": "3b809de46c2f12b0cdfb63e5f5212414108322e3c4c4a05e56a285b579609393",
+      "dimensions": [
+        768,
+        448
+      ],
+      "fps": "24/1",
+      "frames": 124
+    },
+    "first-last-frame": {
+      "status": "execution and full decode verified; perceptual approval not inferred",
+      "prompt_id": "6065c79f-8b64-4dfc-9470-a774ab8d7fa0",
+      "artifact_sha256": "254e5dfe0535aa0aa781c6004bbcdf584a6a2b505a994957bda45d8126a4c697",
+      "dimensions": [
+        768,
+        448
+      ],
+      "fps": "24/1",
+      "frames": 124
+    },
+    "last-frame": {
+      "status": "execution and full decode verified; perceptual approval not inferred",
+      "prompt_id": "3da58bca-d384-40f5-9093-8966e009087e",
+      "artifact_sha256": "0329246c0563c444ac3b3329506af9c0fde71dabba9aeca439db708c6da3ac6f",
+      "dimensions": [
+        768,
+        448
+      ],
+      "fps": "24/1",
+      "frames": 124
+    },
+    "repair-bridge": {
+      "status": "execution and full decode verified; perceptual approval not inferred",
+      "prompt_id": "fc1e572f-b3e9-4e5b-bc0b-b1e16959b958",
+      "artifact_sha256": "3bab554ed2931ca67d198a2d1778d65e1d93c44d5950fb6f349e519d814ad708",
+      "dimensions": [
+        768,
+        448
+      ],
+      "fps": "24/1",
+      "frames": 124,
+      "binding_version": 2,
+      "retained_frames": [
+        0,
+        24
+      ],
+      "endpoint_frame": 23
+    },
+    "repair-extend": {
+      "status": "execution and full decode verified; perceptual approval not inferred",
+      "prompt_id": "db5a9e6f-7270-482c-887f-ce7f0cbf9120",
+      "artifact_sha256": "78bd5f888b5353d69d0a6dd69ee52957943a33a39a4267a648ca536886d907ee",
+      "dimensions": [
+        768,
+        448
+      ],
+      "fps": "24/1",
+      "frames": 124,
+      "binding_version": 1,
+      "retained_frames": [
+        22,
+        46
+      ],
+      "endpoint_frame": null
+    },
+    "repair-fill": {
+      "status": "execution and full decode verified; perceptual approval not inferred",
+      "prompt_id": "b2a48f15-ebed-402c-81a0-08fd55b9b91c",
+      "artifact_sha256": "54ef4697bfe267c341a7fb708230151d9fc33500f14de1d51bb8c066ecf818f5",
+      "dimensions": [
+        768,
+        448
+      ],
+      "fps": "24/1",
+      "frames": 124,
+      "binding_version": 2,
+      "retained_frames": [
+        0,
+        24
+      ],
+      "endpoint_frame": 23
+    },
+    "repair-retake": {
+      "status": "execution and full decode verified; perceptual approval not inferred",
+      "prompt_id": "2c7145fb-3eb8-49c2-898a-fafce12a46d8",
+      "artifact_sha256": "f1531e8a2a06966e64ac05c1d41605059586d5ff9fc41327872dd7d9bf9a3724",
+      "dimensions": [
+        768,
+        448
+      ],
+      "fps": "24/1",
+      "frames": 124,
+      "binding_version": 2,
+      "retained_frames": [
+        0,
+        24
+      ],
+      "endpoint_frame": 23
+    },
+    "voice-guide": {
+      "status": "execution and full decode verified; perceptual approval not inferred",
+      "prompt_id": "8f76e530-625d-4e82-a7ae-0e111e0ac2c1",
+      "artifact_sha256": "cde30280191047501b67125b57f10d744b255bcdce151b31ab7eb02fcec90fae",
+      "dimensions": [
+        768,
+        448
+      ],
+      "fps": "24/1",
+      "frames": 124,
+      "wording_diagnostic": "FAILED ordered-word comparison: intended sentence recognized plus additional ASR words; no expected words were supplied to recognition"
+    }
+  },
+  "connected_cut": {
+    "status": "three actual generated shots assembled and fully decoded; no story/motion/listening approval",
+    "frames": 360,
+    "fps": 24,
+    "artifact_sha256": "98b3f2cfd76fc0a9e3634b5cbacd1b6dc3b849a67cdd035c80357c8aaf90e0ed"
+  }
+}

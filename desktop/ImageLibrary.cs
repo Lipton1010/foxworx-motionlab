@@ -28,6 +28,10 @@ public static class ImageLibrary
     {
         string root = Path.TrimEndingDirectorySeparator(Path.GetFullPath(outputRoot));
         string path = Path.GetFullPath(imagePath);
+        string relative = Path.GetRelativePath(root, path).Replace('\\', '/');
+        if (relative.StartsWith("films/", StringComparison.OrdinalIgnoreCase) ||
+            relative.StartsWith("production-jobs/", StringComparison.OrdinalIgnoreCase))
+            throw new IOException("Managed film assets are protected. Manage them from their film project.");
         if (!path.StartsWith(root + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
             !(Path.GetExtension(path).Equals(".png", StringComparison.OrdinalIgnoreCase) || IsVideo(path)))
             throw new IOException("Only PNG images and videos inside the output folder can be deleted here.");
@@ -91,7 +95,7 @@ public partial class MainWindow
             if (linked.Length > 0) message += "\n\nThis image is used by " + linked.Length + " current reference(s). Those references will also be removed.";
             if (firstFrame) message += "\n\nThis image is also your video's first frame. That selection will be cleared.";
             message += "\n\nFiles in the Recycle Bin can be restored. Windows will warn if permanent deletion is required.";
-            if (MessageBox.Show(this, message, "Delete image?", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) != MessageBoxResult.Yes) return;
+            if (!StudioDialog.Confirm(this, message, "Delete image?")) return;
             try
             {
                 ImageLibrary.Recycle(output, path);
@@ -125,7 +129,7 @@ public partial class MainWindow
         {
             if (!ImageLibrary.CanRecycle(output, path)) throw new IOException("Select a video inside the output folder to delete it.");
             string message = "Move “" + Path.GetFileName(path) + "” and its saved settings to the Recycle Bin?\n\nFiles in the Recycle Bin can be restored. Windows will warn if permanent deletion is required.";
-            if (MessageBox.Show(this, message, "Delete video?", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) != MessageBoxResult.Yes) return;
+            if (!StudioDialog.Confirm(this, message, "Delete video?")) return;
             videoTimer.Stop(); VideoPlayer.Close(); videoPlaying = false; VideoPlayButton.Content = "Play";
             try
             {

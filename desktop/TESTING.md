@@ -149,3 +149,66 @@ Final end-to-end checks:
 - Native UI verification passed for composition, both handoff buttons, saved video
   mode/fields/output on close, and visual layout at default and smaller window sizes.
 - Published the tested self-contained build to app; previous binaries retained in temp.
+
+## Film implementation verification — 2026-11-05
+
+Evidence for the current implementation is under `temp/film-implementation/evidence`.
+Use isolated build state and project roots; do not use historical creative projects as fixtures.
+
+```powershell
+dotnet run --project tests/GraphChecks --artifacts-path temp/film-checks
+dotnet run --project tests/UiChecks --artifacts-path temp/film-checks
+dotnet run --project tests/FilmUiChecks --artifacts-path temp/film-checks -- 'D:\Image Studio'
+dotnet run --project tests/RecycleChecks --artifacts-path temp/film-checks
+dotnet run --project tests/StartupChecks --artifacts-path temp/film-checks
+& D:/ComfyUI/python_embeded/python.exe -m unittest discover -s tests -p 'test_production_*.py'
+```
+
+The source-independent production tests cover persistence/replay/conflicts, adopted
+and collected media, exact edit ranges and repair placement, AV tensors, immutable
+promotion, retained failed judgments and concurrent delivery-state changes. Synthetic
+review judgments are explicitly test data, never evidence of viewed/listened approval.
+
+`measure_film_edit.py` measures a 100-occurrence, 14,400-frame synthetic H.264/AAC
+edit, with budgets declared before export. The measured 640×360 run exported in
+36.42 seconds and fully decoded; its largest measured child working set was 619.68 MiB.
+Actual-client cancellation was about 1.02 seconds against a five-second budget.
+These numbers are workload-specific; export memory excludes the parent UI/driver.
+The original paused WPF player run presented a changed stable visible frame in 60.26 ms
+against a 250 ms budget on this ten-minute cut. The owned-window pixel check does
+not establish target-frame identity or sound synchronization; see `ui/seek.json`.
+
+`verify_film_package.ps1` archives/extracts a portable package, checks every manifest
+entry, and runs film persistence and the graph host with no engine installed.
+`PublishedUiChecks` launches that actual self-contained executable and exercises
+film creation, the appearance popup and native title-bar attributes through UI Automation. `FilmUiChecks`
+renders all old/new workspaces in Dark/Light/System and checks actual Save shot,
+draft preservation, title preference persistence, contrast and a 960×540 logical window.
+The follow-up `--accessibility` mode adds actual keyboard tasks, a live Windows
+high-contrast transition/restoration and foreground checks on actual Films text.
+Physical 100/150/200% scale runs use `--physical-dpi=<percent>` after setting that
+scale through Windows' standard UI; `physical-scale-restoration.json` verifies the
+original 150% was restored. No registry or undocumented DPI mutation is used.
+
+The current Film UI suite also uses an 8-bit frame ID encoded in H.264 source pixels
+to verify exact paused frames, including the last frame and a rational 25/1 fps edit
+reloaded through the shared interface. It waits for real MediaOpened events. Native
+duration may be rounded; managed metadata and cut projections supply frame bounds.
+
+`live_film_modes.py` / `finish_film_validation.py` retain a resumable, isolated ten-job
+follow-up fixture. They exercise the same packaged JSON interface, exact ownership,
+source/range bindings and real sound assembly. `transcribe_film_trial.py` is an offline
+CPU diagnostic using an independently verified existing runtime/model, never a required
+bundled dependency. Its failed wording check must not be relabelled as a pass.
+
+The explicit temporary process coexistence approval is scoped to ten exact admission
+owners and two exact PID/executable/start-time identities, with expiry and immutable
+permission snapshots. The normal app has no automatic coexistence permission. Missing,
+expired, changed-byte or different-owner approval keeps strict waiting in force.
+
+`live_film_preview.py` and `live_av_restart.py` are opt-in bounded GPU diagnostics,
+not ordinary unit tests. Read current model inventory/research and existing reservations
+before running them. Their evidence records the selected UUIDs and full graphs; never
+delete a receipt or automatically replay an ambiguous submission. Only the tested
+preview/finish/decode modes receive execution evidence; semantic/listening review
+and untested conditioning modes remain unverified.

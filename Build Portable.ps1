@@ -2,6 +2,7 @@ param([string]$OutputDirectory, [switch]$NoArchive)
 $ErrorActionPreference='Stop'
 $studioRoot=$PSScriptRoot
 if(-not $OutputDirectory){$OutputDirectory=Join-Path $studioRoot 'dist'}
+$OutputDirectory=[IO.Path]::GetFullPath($OutputDirectory)
 $env:DOTNET_CLI_HOME=Join-Path $studioRoot 'temp/sandbox-dotnet'
 $env:DOTNET_CLI_TELEMETRY_OPTOUT='1'
 $stage=Join-Path $studioRoot ('temp/portable-build-'+[guid]::NewGuid().ToString('N'))
@@ -21,6 +22,7 @@ foreach($name in 'Common.ps1','Install.ps1','Setup.ps1','catalog.json'){
     Copy-Item -LiteralPath (Join-Path $studioRoot "portable/$name") -Destination (Join-Path $package 'portable')
 }
 Copy-Item -LiteralPath (Join-Path $studioRoot 'desktop/rewrite_prompt.py') -Destination (Join-Path $package 'desktop')
+& (Join-Path $studioRoot 'Package Production.ps1') -Destination $package -SelfContained
 Copy-Item -LiteralPath (Join-Path $studioRoot 'runtime/qwen-prompt-rewrite/pe_core.py') -Destination (Join-Path $package 'runtime/qwen-prompt-rewrite')
 Get-ChildItem -LiteralPath (Join-Path $studioRoot 'runtime/custom_nodes/moss-image') -File | Where-Object { $_.Extension -in '.py','.toml' -or $_.Name -eq 'LICENSE' } | Copy-Item -Destination (Join-Path $package 'runtime/custom_nodes/moss-image')
 foreach($name in '7z.exe','7z.dll'){
@@ -33,10 +35,10 @@ Copy-Item -LiteralPath (Join-Path $runtime.FullName 'LICENSE.TXT') -Destination 
 Copy-Item -LiteralPath (Join-Path $runtime.FullName 'THIRD-PARTY-NOTICES.TXT') -Destination (Join-Path $package 'licenses/Microsoft.NET-third-party.txt')
 $desktopRuntime=Get-ChildItem -LiteralPath (Join-Path $studioRoot 'temp/portable-nuget/microsoft.windowsdesktop.app.runtime.win-x64') -Directory | Sort-Object {[version]$_.Name} -Descending | Select-Object -First 1
 Copy-Item -LiteralPath (Join-Path $desktopRuntime.FullName 'LICENSE') -Destination (Join-Path $package 'licenses/Microsoft.WindowsDesktop.txt')
-@{version='2.2.0';engine='ComfyUI 0.42.1';portable=$true} | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $package 'portable.json')
+@{version='2.3.0';engine='ComfyUI 0.42.1';portable=$true} | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $package 'portable.json')
 Copy-Item -LiteralPath (Join-Path $studioRoot 'portable/TEST RESULTS.txt') -Destination $package
 @'
-Image Studio portable 2.2.0
+Image Studio portable 2.3.0
 
 Included third-party components:
 - Microsoft .NET 10 Windows Desktop runtime: notices in this folder.
@@ -63,8 +65,8 @@ $manifest=@($files | ForEach-Object { (Get-FileHash -LiteralPath $_.FullName -Al
 Write-Output "PACKAGE=$package"
 if($NoArchive){exit 0}
 New-Item -ItemType Directory -Path $OutputDirectory -Force | Out-Null
-$archive=Join-Path $OutputDirectory 'Image-Studio-2.2.0-Windows-Portable.exe'
-$zip=Join-Path $OutputDirectory 'Image-Studio-2.2.0-Windows-Portable.zip'
+$archive=Join-Path $OutputDirectory 'Image-Studio-2.3.0-Windows-Portable.exe'
+$zip=Join-Path $OutputDirectory 'Image-Studio-2.3.0-Windows-Portable.zip'
 if((Test-Path -LiteralPath $archive) -or (Test-Path -LiteralPath $zip)){throw 'Output files already exist. Choose a new OutputDirectory to preserve the previous release.'}
 $seven=Join-Path $env:ProgramFiles '7-Zip/7z.exe'
 Push-Location $stage
