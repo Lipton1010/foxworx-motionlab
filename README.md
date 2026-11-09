@@ -1,6 +1,18 @@
-# Image Studio
+# Foxworx Motionlab
 
-Local still-image and video generation with a native Windows desktop app.
+**A local Windows workspace for creating still images and video from prompts and references.**
+
+[Open and generate](#open-and-generate) · [Models and video](#models-loras-and-video) · [Production notes](desktop/PRODUCTION.md) · [Runtime requirements](#runtime)
+
+![Foxworx Motionlab workflow: compose a prompt or references, create an image or video, then review and save media with settings](docs/portfolio/workflow.svg)
+
+*Workflow illustration, not a screenshot or generated-media sample.*
+
+- **Create and edit still images.** Work from a prompt or supported reference images.
+- **Move into video.** Start from text or animate a first frame, then preview and save the result.
+- **Keep the process local.** Reuse installed model libraries and retain prompt/settings metadata.
+
+**Project status:** source and local-workspace documentation; no public installer release is currently published. Existing launchers, executable names and local paths still use **Image Studio**. Those exact technical names are retained below so the instructions remain usable.
 
 For local multi-shot production experiments, see [production checks and resumable
 jobs](desktop/PRODUCTION.md). These optional tools add dependency-aware reuse,
@@ -102,7 +114,7 @@ alpha channel and the background is transparent.” Save as PNG to retain alpha.
 | `logs` | Startup/runtime logs and the owned server PID |
 | `runtime` | Pinned ComfyUI source and isolated updated packages |
 
-`extra_model_paths.yaml` tells ComfyUI where models live. Image Studio also reads
+`extra_model_paths.yaml` tells ComfyUI where models live. Foxworx Motionlab also reads
 the existing models in `D:\ComfyUI\ComfyUI\models`; those are not copied.
 Another project can point at this same Qwen library using:
 
@@ -122,12 +134,12 @@ when possible to avoid loading duplicate models into GPU memory.
 
 The original battlemap ComfyUI installation and production defaults are unchanged.
 Its older runtime cannot execute the new Qwen 2.1 nodes merely by seeing the files.
-The battlemap evaluation used Image Studio's server and saved its evidence under
+The battlemap evaluation used Foxworx Motionlab's server and saved its evidence under
 `D:\Battlemap Pipeline\output\evaluations\qwen21-pilot-2026-09-22`.
 
 ## Runtime
 
-Image Studio uses ComfyUI **0.42.1**, with frontend **1.55.18**,
+Foxworx Motionlab uses ComfyUI **0.42.1**, with frontend **1.55.18**,
 comfy-kitchen **0.2.39** and comfy-aimdo **0.5.6** (updated October 19, 2026).
 The source is in `runtime/backend-0.42.1`; updated packages are isolated in
 `runtime/packages-0.42.1`. Exact package versions are in `runtime-requirements.txt`.
