@@ -1,4 +1,4 @@
-﻿param([Parameter(Mandatory)][string]$Destination, [switch]$SelfContained)
+param([Parameter(Mandatory)][string]$Destination, [switch]$SelfContained)
 $ErrorActionPreference='Stop'
 $productionPackage = [IO.Path]::GetFullPath($Destination)
 if(Test-Path -LiteralPath (Join-Path $productionPackage 'runtime/media')){
@@ -9,7 +9,7 @@ if($productionPackage -ne [IO.Path]::GetFullPath($PSScriptRoot)){
     Get-ChildItem -LiteralPath (Join-Path $PSScriptRoot 'desktop') -File | Where-Object { $_.Name -like 'production_*.py' -or $_.Name -like 'production_*.json' -or $_.Name -in 'rewrite_prompt.py','prompt_profiles.py','FILM_PROCESS.md','PRODUCTION.md' } | Copy-Item -Destination (Join-Path $productionPackage 'desktop')
     Get-ChildItem -LiteralPath (Join-Path $PSScriptRoot 'runtime/custom_nodes/image-studio-av') -File -Filter '*.py' | Copy-Item -Destination (Join-Path $productionPackage 'runtime/custom_nodes/image-studio-av')
 }
-$hostArguments=@('publish',(Join-Path $PSScriptRoot 'graph-host/GraphHost.csproj'),'-c','Release','-r','win-x64','--self-contained',($SelfContained.IsPresent.ToString().ToLower()),'--artifacts-path',(Join-Path $PSScriptRoot 'temp/film-package-artifacts'),'-p:NuGetAudit=false','-p:RestoreIgnoreFailedSources=true',('-p:RestorePackagesPath='+(Join-Path $PSScriptRoot 'temp/portable-nuget')),'-p:RestoreSources=https://api.nuget.org/v3/index.json','-o',(Join-Path $productionPackage 'app/graph-host'))
+$hostArguments=@('publish',(Join-Path $PSScriptRoot 'graph-host/GraphHost.csproj'),'-c','Release','-r','win-x64','--self-contained',($SelfContained.IsPresent.ToString().ToLower()),'--artifacts-path',(Join-Path $PSScriptRoot 'temp/film-package-artifacts'),'-p:DebugType=None','-p:DebugSymbols=false','-p:NuGetAudit=false','-p:RestoreIgnoreFailedSources=true',('-p:RestorePackagesPath='+(Join-Path $PSScriptRoot 'temp/portable-nuget')),'-p:RestoreSources=https://api.nuget.org/v3/index.json','-o',(Join-Path $productionPackage 'app/graph-host'))
 & dotnet @hostArguments
 if($LASTEXITCODE -ne 0){throw 'Production graph host publish failed.'}
 $pythonSource=Join-Path $PSScriptRoot 'runtime/ComfyUI_windows_portable/python_embeded'
