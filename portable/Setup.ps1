@@ -1,4 +1,4 @@
-﻿param([switch]$SmokeTest, [string]$ScreenshotPath)
+param([switch]$SmokeTest, [string]$ScreenshotPath)
 $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot 'Common.ps1')
 Add-Type -AssemblyName System.Windows.Forms,System.Drawing
@@ -44,7 +44,7 @@ $refreshTotal={
     $ids=@($checks | Where-Object Checked | ForEach-Object Tag)
     $engineBytes=0; if($ids.Count -gt 0){$engineBytes=$catalog.engine.bytes}
     $bytes=(@(Get-StudioPlan $catalog $ids $hardware) | Measure-Object bytes -Sum).Sum
-    if($ids.Count -eq 0){$total.Text="Core-only harness: no model or engine download. Open Image Studio for planning/imported media; add supported packs when ready."; return}
+    if($ids.Count -eq 0){$total.Text="Core-only harness: no model or engine download. Open FoxWorx MotionLab for planning/imported media; add supported packs when ready."; return}
     $total.Text="Selected downloads: $([math]::Round($bytes/1e9,1)) GB, including the required 2 GB engine.`nKeep another 20 GiB free for extraction and working space. Existing verified downloads are reused."
 }
 foreach($check in $checks){$check.Add_CheckedChanged($refreshTotal)}
@@ -57,7 +57,7 @@ $layout.Controls.Add($progress,0,5)
 $actions=New-Object Windows.Forms.FlowLayoutPanel; $actions.Dock='Fill'
 $install=New-Object Windows.Forms.Button; $install.Text='Install selected'; $install.Width=145; $install.Height=36
 $cancel=New-Object Windows.Forms.Button; $cancel.Text='Cancel download'; $cancel.Width=145; $cancel.Height=36; $cancel.Enabled=$false
-$open=New-Object Windows.Forms.Button; $open.Text='Open Image Studio'; $open.Width=165; $open.Height=36
+$open=New-Object Windows.Forms.Button; $open.Text='Open FoxWorx MotionLab'; $open.Width=210; $open.Height=36
 $open.Add_Click({Start-Process (Join-Path $studioRoot 'app/Image Studio.exe')})
 $refresh=New-Object Windows.Forms.Button; $refresh.Text='Recheck hardware'; $refresh.Width=145; $refresh.Height=36
 $media=New-Object Windows.Forms.Button; $media.Text='Media tools'; $media.Width=125; $media.Height=36
@@ -123,7 +123,7 @@ $install.Add_Click({
         $ids=@($checks | Where-Object Checked | ForEach-Object Tag)
         $reason=Get-StudioCompatibility ([pscustomobject]@{minRamGB=16;minVramGB=8}) $hardware
         if($ids.Count -gt 0 -and $reason){throw $reason}
-        if($ids.Count -eq 0){$progress.Text="Core-only harness needs no model download or GPU. Use Open Image Studio; generation requires a supported pack."; return}
+        if($ids.Count -eq 0){$progress.Text="Core-only harness needs no model download or GPU. Use Open FoxWorx MotionLab; generation requires a supported pack."; return}
         $script:downloadEntries=@(Get-StudioPlan $catalog $ids $hardware)
         $review=New-Object Windows.Forms.Form
         $review.Text='Review downloads and model terms'; $review.Size=New-Object Drawing.Size(820,640); $review.StartPosition='CenterParent'
