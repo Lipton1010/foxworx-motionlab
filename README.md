@@ -2,7 +2,7 @@
 
 **A local Windows workspace for creating still images and video from prompts and references.**
 
-[Open and generate](#open-and-generate) � [Models and video](#models-loras-and-video) � [Production notes](desktop/PRODUCTION.md) � [Runtime requirements](#runtime)
+[Open and generate](#open-and-generate) · [Models and video](#models-loras-and-video) · [Production notes](desktop/PRODUCTION.md) · [Runtime requirements](#runtime)
 
 ![Foxworx Motionlab workflow: compose a prompt or references, create an image or video, then review and save media with settings](docs/portfolio/workflow.svg)
 
@@ -24,7 +24,7 @@ For local multi-shot production experiments, see [production checks and resumabl
 jobs](desktop/PRODUCTION.md). These optional tools add dependency-aware reuse,
 conservative recovery and media checks; they do not add a longform desktop editor.
 
-## Desktop 2.1.0 - October 24, 2026
+## Desktop 2.1.0 — October 24, 2026
 
 The desktop interface now uses a light workspace, clearer setup panels, larger
 prompt fields, and a simpler layered-canvas icon. Cold-start model selection is
@@ -90,24 +90,24 @@ running `Build Desktop.ps1`. App error details are in `logs\desktop-errors.log`.
 ## Advanced node interface
 
 Double-click **Open ComfyUI.cmd** if you want the node editor. In its left sidebar,
-select **Workflows  Qwen 2.1  Generate Image** or **Edit Image**.
+select **Workflows → Qwen 2.1 → Generate Image** or **Edit Image**.
 
 The interface is at http://127.0.0.1:8193 while the server is running. Closing the
 browser leaves the server running. Reopening the launcher reuses that server.
 Double-click **Stop Image Studio.cmd** to stop an idle server and release its
 memory. It refuses to stop while images are running or queued.
 The first model load takes longer. Start with one image at 1 megapixel; the local
-pilot also tests 2048 x 2048. The 25-step Euler/simple, CFG 1 settings come from
+pilot also tests 2048 × 2048. The 25-step Euler/simple, CFG 1 settings come from
 the official ComfyUI template. Larger images and more references need more memory.
 
-Use **Qwen 2.1  Edit Image** for editing: upload your source image into the
+Use **Qwen 2.1 → Edit Image** for editing: upload your source image into the
 Load Image node and describe the change using `<image1>` in the prompt. The
 included example starts with the pilot map. The underlying official workflow
 also has inputs for additional references, addressed as `<image2>`, and so on.
 
 For transparent images, Qwen recommends this prompt format:
-"This is an RGBA image with transparency. [Describe your image.] The image has
-alpha channel and the background is transparent." Save as PNG to retain alpha.
+“This is an RGBA image with transparency. [Describe your image.] The image has
+alpha channel and the background is transparent.” Save as PNG to retain alpha.
 
 ## One model library, separate projects
 
