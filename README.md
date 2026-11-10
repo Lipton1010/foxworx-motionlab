@@ -2,7 +2,7 @@
 
 **A local Windows workspace for creating still images and video from prompts and references.**
 
-[Open and generate](#open-and-generate) · [Models and video](#models-loras-and-video) · [Production notes](desktop/PRODUCTION.md) · [Runtime requirements](#runtime)
+[Open and generate](#open-and-generate) � [Models and video](#models-loras-and-video) � [Production notes](desktop/PRODUCTION.md) � [Runtime requirements](#runtime)
 
 ![Foxworx Motionlab workflow: compose a prompt or references, create an image or video, then review and save media with settings](docs/portfolio/workflow.svg)
 
@@ -12,13 +12,19 @@
 - **Move into video.** Start from text or animate a first frame, then preview and save the result.
 - **Keep the process local.** Reuse installed model libraries and retain prompt/settings metadata.
 
-**Project status:** source and local-workspace documentation; no public installer release is currently published. Existing launchers, executable names and local paths still use **Image Studio**. Those exact technical names are retained below so the instructions remain usable.
+**Windows beta available:** [Download FoxWorx MotionLab 2.4.0 beta 1](https://github.com/Lipton1010/foxworx-motionlab/releases/tag/v2.4.0-beta.1).
+
+Choose the unsigned self-extracting EXE (95.2 MB) or ZIP (136.8 MB), verify the published SHA-256, and extract into a **new local folder**. Open **Setup.cmd** to inspect your machine and review optional engine, model, prompt-refiner and media-tool downloads. No model weights, generation engine or FFmpeg are bundled. Existing workspaces and model libraries should be preserved, not overwritten.
+
+Original app code is Apache-2.0. Each model and component retains its own terms. Read the release notes for the tested RTX 4090 scope, estimated memory requirements, unsigned Windows warnings and untested hardware/features. This is an experimental prerelease, not a stable or universally compatible release.
+
+Existing launchers, executable names and local paths retain **Image Studio** for compatibility; the app and setup use **FoxWorx MotionLab** branding.
 
 For local multi-shot production experiments, see [production checks and resumable
 jobs](desktop/PRODUCTION.md). These optional tools add dependency-aware reuse,
 conservative recovery and media checks; they do not add a longform desktop editor.
 
-## Desktop 2.1.0 — October 24, 2026
+## Desktop 2.1.0 - October 24, 2026
 
 The desktop interface now uses a light workspace, clearer setup panels, larger
 prompt fields, and a simpler layered-canvas icon. Cold-start model selection is
@@ -84,24 +90,24 @@ running `Build Desktop.ps1`. App error details are in `logs\desktop-errors.log`.
 ## Advanced node interface
 
 Double-click **Open ComfyUI.cmd** if you want the node editor. In its left sidebar,
-select **Workflows → Qwen 2.1 → Generate Image** or **Edit Image**.
+select **Workflows  Qwen 2.1  Generate Image** or **Edit Image**.
 
 The interface is at http://127.0.0.1:8193 while the server is running. Closing the
 browser leaves the server running. Reopening the launcher reuses that server.
 Double-click **Stop Image Studio.cmd** to stop an idle server and release its
 memory. It refuses to stop while images are running or queued.
 The first model load takes longer. Start with one image at 1 megapixel; the local
-pilot also tests 2048 × 2048. The 25-step Euler/simple, CFG 1 settings come from
+pilot also tests 2048 x 2048. The 25-step Euler/simple, CFG 1 settings come from
 the official ComfyUI template. Larger images and more references need more memory.
 
-Use **Qwen 2.1 → Edit Image** for editing: upload your source image into the
+Use **Qwen 2.1  Edit Image** for editing: upload your source image into the
 Load Image node and describe the change using `<image1>` in the prompt. The
 included example starts with the pilot map. The underlying official workflow
 also has inputs for additional references, addressed as `<image2>`, and so on.
 
 For transparent images, Qwen recommends this prompt format:
-“This is an RGBA image with transparency. [Describe your image.] The image has
-alpha channel and the background is transparent.” Save as PNG to retain alpha.
+"This is an RGBA image with transparency. [Describe your image.] The image has
+alpha channel and the background is transparent." Save as PNG to retain alpha.
 
 ## One model library, separate projects
 
