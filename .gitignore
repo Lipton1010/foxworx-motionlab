@@ -6,6 +6,8 @@
 !/.gitignore
 !/.ignore
 !/README.md
+!/LICENSE
+!/NOTICE
 !/launch.py
 !/runtime-requirements.txt
 !/Build Desktop.ps1
@@ -21,9 +23,6 @@
 !/tests/
 !/runtime/
 /runtime/*
-!/runtime/qwen-prompt-rewrite/
-/runtime/qwen-prompt-rewrite/*
-!/runtime/qwen-prompt-rewrite/pe_core.py
 !/runtime/custom_nodes/
 /runtime/custom_nodes/*
 !/runtime/custom_nodes/moss-image/

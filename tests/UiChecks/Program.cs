@@ -31,6 +31,7 @@ internal static class Program
             if (!condition) throw new Exception("FAIL: " + message);
             checks++; Console.WriteLine("PASS: " + message);
         }
+        Check(Control<ComboBox>("RefinerTier").Items.Count == 2, "Refiner offers separate 4B and 9B choices");
         var image = Control<ComboBox>("ImageModelBox");
         var video = Control<ComboBox>("VideoModelBox");
         var workspace = new WorkspaceSettings();
@@ -86,7 +87,7 @@ internal static class Program
         built.Text = "Image draft edited by the user";
         mediaType.SelectedIndex = 1;
         Check(built.Text == "" && Control<StackPanel>("BuilderVideoFields").Visibility == Visibility.Visible, "Video mode opens its own draft and motion controls");
-        Check(Control<StackPanel>("BuilderArtworkFields").Visibility == Visibility.Collapsed && Control<StackPanel>("ImageRefinementControls").Visibility == Visibility.Collapsed, "Video mode hides image presets and the image-only refiner");
+        Check(Control<StackPanel>("BuilderArtworkFields").Visibility == Visibility.Collapsed && Control<StackPanel>("ImageRefinementControls").Visibility == Visibility.Visible, "Video mode hides image presets but exposes model-specific refinement");
         Control<TextBox>("BuilderSubject").Text = "A fox in a garden";
         Control<TextBox>("BuilderMotion").Text = "Turns toward the door";
         Control<TextBox>("BuilderCamera").Text = "Slow push-in";

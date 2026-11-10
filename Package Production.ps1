@@ -1,9 +1,12 @@
-param([Parameter(Mandatory)][string]$Destination, [switch]$SelfContained)
+﻿param([Parameter(Mandatory)][string]$Destination, [switch]$SelfContained)
 $ErrorActionPreference='Stop'
 $productionPackage = [IO.Path]::GetFullPath($Destination)
+if(Test-Path -LiteralPath (Join-Path $productionPackage 'runtime/media')){
+    throw 'Use a clean staging directory: media runtimes are optional upstream downloads and must not be bundled.'
+}
 New-Item -ItemType Directory -Path (Join-Path $productionPackage 'desktop'),(Join-Path $productionPackage 'app/graph-host'),(Join-Path $productionPackage 'runtime/custom_nodes/image-studio-av'),(Join-Path $productionPackage 'runtime/production-python'),(Join-Path $productionPackage 'licenses') -Force | Out-Null
 if($productionPackage -ne [IO.Path]::GetFullPath($PSScriptRoot)){
-    Get-ChildItem -LiteralPath (Join-Path $PSScriptRoot 'desktop') -File | Where-Object { $_.Name -like 'production_*.py' -or $_.Name -like 'production_*.json' -or $_.Name -in 'rewrite_prompt.py','FILM_PROCESS.md','PRODUCTION.md' } | Copy-Item -Destination (Join-Path $productionPackage 'desktop')
+    Get-ChildItem -LiteralPath (Join-Path $PSScriptRoot 'desktop') -File | Where-Object { $_.Name -like 'production_*.py' -or $_.Name -like 'production_*.json' -or $_.Name -in 'rewrite_prompt.py','prompt_profiles.py','FILM_PROCESS.md','PRODUCTION.md' } | Copy-Item -Destination (Join-Path $productionPackage 'desktop')
     Get-ChildItem -LiteralPath (Join-Path $PSScriptRoot 'runtime/custom_nodes/image-studio-av') -File -Filter '*.py' | Copy-Item -Destination (Join-Path $productionPackage 'runtime/custom_nodes/image-studio-av')
 }
 $hostArguments=@('publish',(Join-Path $PSScriptRoot 'graph-host/GraphHost.csproj'),'-c','Release','-r','win-x64','--self-contained',($SelfContained.IsPresent.ToString().ToLower()),'--artifacts-path',(Join-Path $PSScriptRoot 'temp/film-package-artifacts'),'-p:NuGetAudit=false','-p:RestoreIgnoreFailedSources=true',('-p:RestorePackagesPath='+(Join-Path $PSScriptRoot 'temp/portable-nuget')),'-p:RestoreSources=https://api.nuget.org/v3/index.json','-o',(Join-Path $productionPackage 'app/graph-host'))
@@ -24,16 +27,8 @@ if(!$zip){throw 'Embedded Python standard-library ZIP is missing.'}
 $pth=Join-Path $pythonTarget ($zip.BaseName+'._pth')
 [IO.File]::WriteAllLines($pth,@($zip.Name,'.','import site'),[Text.UTF8Encoding]::new($false))
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'portable/licenses/Python-3.13.14-embedded.txt') -Destination (Join-Path $productionPackage 'licenses/Python.txt')
-# Configure supported existing media binaries explicitly; portable archives need no developer PATH.
-New-Item -ItemType Directory -Path (Join-Path $productionPackage 'runtime/media') -Force | Out-Null
-foreach($name in 'ffmpeg','ffprobe'){
-    $bundled=Join-Path $PSScriptRoot ('runtime/media/'+$name+'.exe')
-    if(!(Test-Path -LiteralPath $bundled)){$bundled='C:/ProgramData/chocolatey/lib/ffmpeg/tools/ffmpeg/bin/'+$name+'.exe'}
-    if(Test-Path -LiteralPath $bundled){Copy-Item -LiteralPath $bundled -Destination (Join-Path $productionPackage 'runtime/media')}
-    else{throw ('A verified existing '+$name+' executable is required to package production media tools.')}
-}
-Copy-Item -LiteralPath 'C:/ProgramData/chocolatey/lib/ffmpeg/tools/ffmpeg/LICENSE' -Destination (Join-Path $productionPackage 'licenses/FFmpeg-GPLv3.txt')
-Copy-Item -LiteralPath 'C:/ProgramData/chocolatey/lib/ffmpeg/tools/ffmpeg/README.txt' -Destination (Join-Path $productionPackage 'licenses/FFmpeg-build-and-source.txt')
-$runtimeFiles=@(Get-ChildItem -LiteralPath $pythonTarget,(Join-Path $productionPackage 'runtime/media') -File | ForEach-Object { [ordered]@{path=[IO.Path]::GetRelativePath($productionPackage,$_.FullName);sha256=(Get-FileHash -LiteralPath $_.FullName).Hash.ToLower();bytes=$_.Length} })
-@{python='3.13.14 existing embedded Windows runtime; all 30 binary/stdlib files match the official distribution';pythonSource=$pythonManifest.source;pythonArchiveSha256=$pythonManifest.archive_sha256;ffmpeg='8.1.1 Gyan essentials GPLv3';ffmpegSource='https://github.com/FFmpeg/FFmpeg/commit/239f2c733d';files=$runtimeFiles} | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath (Join-Path $productionPackage 'production-runtime-manifest.json')
+# Media executables are supplied only through an explicit upstream download.
+# Never copy developer/Chocolatey binaries or mismatched notices into a release.
+$runtimeFiles=@(Get-ChildItem -LiteralPath $pythonTarget -File | ForEach-Object { [ordered]@{path=[IO.Path]::GetRelativePath($productionPackage,$_.FullName);sha256=(Get-FileHash -LiteralPath $_.FullName).Hash.ToLower();bytes=$_.Length} })
+@{python='3.13.14 existing embedded Windows runtime; all 30 binary/stdlib files match the official distribution';pythonSource=$pythonManifest.source;pythonArchiveSha256=$pythonManifest.archive_sha256;ffmpeg='Not bundled; user-consented upstream download through Setup > Media tools';ffmpegSource='portable/media-runtime.json';files=$runtimeFiles} | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath (Join-Path $productionPackage 'production-runtime-manifest.json')
 Write-Output ('PRODUCTION_HELPERS='+$productionPackage)

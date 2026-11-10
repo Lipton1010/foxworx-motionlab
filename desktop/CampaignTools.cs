@@ -160,14 +160,15 @@ public partial class MainWindow
 
     private void UpdateBuilderMode()
     {
-        BuilderArtworkFields.Visibility = ImagePromptActions.Visibility = ImageRefinementControls.Visibility = builderVideo ? Visibility.Collapsed : Visibility.Visible;
+        BuilderArtworkFields.Visibility = ImagePromptActions.Visibility = builderVideo ? Visibility.Collapsed : Visibility.Visible;
+        ImageRefinementControls.Visibility = Visibility.Visible;
         BuilderVideoFields.Visibility = VideoPromptActions.Visibility = builderVideo ? Visibility.Visible : Visibility.Collapsed;
         BuilderIntro.Text = builderVideo ? "Describe the scene, movement, and sound." : "Set the subject, look, and details that matter.";
         BuilderOutputHint.Text = builderVideo ? "Edit freely, then send your prompt to Videos." : "Edit freely. Refine when you're ready.";
         BuilderDraftState.Text = builderVideo ? "Video draft · editable · apply to text or first-frame video below" : "Image draft · editable · apply to a new image or edit below";
         BuilderPreserveLabel.Content = builderVideo ? "Details to keep consistent throughout" : "For edits: what should stay unchanged?";
         RewriteInfo.Text = builderVideo
-            ? "Build and edit video prompts here. Local AI refinement is available for image prompts only. Choose duration and a first frame, if needed, in Videos."
+            ? "Refinement uses the selected video model profile and optional first frame. Choose the model, duration and first frame in Videos."
             : "AI refinement runs on your computer. Review its changes before generating.";
     }
 

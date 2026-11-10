@@ -1,0 +1,53 @@
+Release candidate validation - 2026-11-09
+
+This is an unreleased working tree, not certification of a published installer.
+Motionlab: 96 portable setup checks; 86 Python tests (5 skipped); desktop build
+has zero warnings/errors. 35 real-control UI and 113 graph/workflow checks passed.
+Setup UI was opened offscreen on Windows and inspected; no installation started.
+
+Optional Qwen3.5 4B Q4_K_M + F16 projector, llama.cpp b11146 CUDA 12.4:
+Synthetic H3 text refinement and one-image edit refinement passed on RTX 4090
+24 GB. Latest bounded run: 4.36s text, 4.91s image, sampled whole-board peak
+5713 MiB against about 1655 MiB idle baseline. Full language-model GPU layer
+placement was verified; explicit CUDA0 selected for language and vision.
+Owned-process cancellation was checked; existing engine jobs were not stopped.
+No image/video was generated. No private user inputs were used.
+
+These observations do not certify physical 8/12/16 GB GPUs, large reference sets,
+long contexts, final generated-media quality, or the untested 9B pack.
+Listed setup/memory floors are conservative admission estimates.
+
+Release gates still open: clean source/version choice; actual fresh installer
+and upgrade tests; root/component license and redistribution audit (including
+GPL FFmpeg corresponding source); signing policy; README release links.
+No GitHub release has been published by this preparation work.
+
+Media-harness validation update:
+98 portable setup checks, 12 media installer checks and 86 Python regressions
+(5 skipped) passed. Fresh isolated upstream media installation passed a
+synthetic one-second H.264/AAC export and full decode. The core no longer
+bundles FFmpeg; Setup requires explicit consent for the checksum-pinned,
+dated upstream download and retains its GPL notice. Existing configured tools
+remain supported. This is not a general legal or codec-patent clearance.
+Unsigned Windows beta packaging is approved; app license, exact source/version
+selection and final installer/upgrade validation still block publication.
+
+Fresh portable harness validation completed: 892 package files verified against
+SHA256SUMS after archive extraction; embedded Python, project persistence and
+real graph host passed. No engine/media binaries bundled. With PATH stripped
+of developer tools, readiness reports both media tools missing correctly.
+MediaChecks now has 13 passing checks. This is isolated testing on Alpha, not
+a pristine Windows VM or final signed/unsigned installer upgrade certification.
+
+Apache-2.0 freeze review, 2026-11-10:
+Original application licensing selected by the owner. Apache LICENSE and NOTICE
+are included; optional model/vendor restrictions remain independent. The legacy
+restricted Qwen PE helper is removed from the current tracked source (historical
+commits are not relicensed). Matching unmodified 7-Zip 26.01 source and LGPL text
+are included and all three redistributed 7-Zip binaries are hash-pinned.
+FoxWorx MotionLab branding retains the established icon and compatible underlying
+Image Studio filenames. Candidate version: 2.4.0-beta.1.
+Current checks: 98 portable checks, 13 media checks, 86 Python tests run
+(81 passed, 5 skipped), 35 real-control UI checks, 113 graph/workflow checks.
+A base Python run lacked Torch; the full Python rerun used the existing Torch
+runtime with GPU disabled. Final candidate archive tests are recorded separately.

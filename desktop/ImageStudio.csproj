@@ -7,7 +7,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <AssemblyName>Image Studio</AssemblyName>
     <RootNamespace>ImageStudio</RootNamespace>
-    <Version>2.3.0</Version>
+    <Version>2.4.0-beta.1</Version>
+    <Product>FoxWorx MotionLab</Product>
+    <Title>FoxWorx MotionLab</Title>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Assets\ImageStudio.ico</ApplicationIcon>
   </PropertyGroup>

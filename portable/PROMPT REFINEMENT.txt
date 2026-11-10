@@ -1,0 +1,21 @@
+Prompt refinement in this release candidate
+
+The generation model selected in Images or Videos selects the prompting profile.
+The refiner is a separate optional Qwen3.5 4B or 9B model, not the image/video generator.
+The old Qwen Image 2.1 prompt-expansion code and prompts are not used.
+
+Supported profile routes match the current app workflows:
+- Qwen Image 2.1: new images and reference-image edits.
+- Krea 2 and MOSS Image: text-to-image.
+- LTX 2.5 and MiniMax H3: text-to-video or an existing first frame.
+H3's hosted multimodal-reference and full Context-IR features are not advertised by this local integration.
+
+Each result records its profile version/hash and exact model hash. Review the draft before applying it; Undo restores the previous draft. Failures never replace your input. No inference or generation occurs merely by opening setup or selecting a model.
+
+Optional local custom profiles can be placed at prompt-profiles/<family>.json, where family is qwen, krea, moss, ltx or minimax. The object must contain nonempty version and guidance strings. Custom guidance does not remove the shared preservation instructions or add unsupported workflow modes. Changing it changes the recorded profile hash.
+
+Hardware policy: 4B requests 6 GiB free VRAM, 9B requests 10 GiB, on NVIDIA device 0. Setup floors are 8/16 GB VRAM/RAM for 4B and 12/24 GB for 9B. These are conservative estimates, NOT benchmark-certified minimums. Context is capped at 8192 tokens; references increase memory demand. Unknown device mappings fail closed. No automatic CPU inference fallback is intended. A private local runtime is stopped before generation resumes.
+
+Bounded 4B validation on RTX 4090 24 GB: text and one synthetic image passed with llama.cpp b11146; final cases took about 4.4 and 5.5 seconds including loading. Sampled whole-board VRAM peaks were 5039 and 5713 MiB, with about 1655 MiB baseline afterward. Exact test dialogue, duration and lettering were preserved. Owned-process cancellation published no result and released the runtime. This does not certify broader output quality, larger image/context loads, a physical smaller GPU, 9B, or the exact packaged release artifact.
+
+Profiles contain independently written guidance with official source links in desktop/prompt_profiles.py. Model licenses do not authorize restricted uses of the selected image/video generator, reference images or cloned voices.

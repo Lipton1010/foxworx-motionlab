@@ -1,4 +1,4 @@
-# Foxworx Motionlab
+# FoxWorx MotionLab
 
 **A local Windows workspace for creating still images and video from prompts and references.**
 
@@ -217,3 +217,7 @@ To reinstall the rewriters, run `desktop/setup_rewriters.py` with the existing
 verified Windows runtime; the shared Python installation is not modified.
 The earlier full-precision model downloads are retained under `t2i` and `edit`
 but are no longer loaded by the app. Only their system prompt files are used.
+
+## License
+
+Original application code is licensed under [Apache-2.0](LICENSE). Third-party components and optional models retain their own terms; see [NOTICE](NOTICE). The app license does not authorize restricted model use or grant rights to voices or media.

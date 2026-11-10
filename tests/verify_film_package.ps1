@@ -29,7 +29,8 @@ function Invoke-Film([hashtable]$Request){
     return $result.result
 }
 $readiness=Invoke-Film @{version=1;operation='readiness';request_id='fresh-readiness';payload=@{}}
-if(!(Test-Path -LiteralPath $readiness.tools.ffmpeg) -or !(Test-Path -LiteralPath $readiness.tools.ffprobe)){throw 'Packaged media tools did not resolve without PATH.'}
+if(Test-Path -LiteralPath (Join-Path $fresh 'runtime/media')){throw 'Media binaries must not ship in the core archive.'}
+if(!(Test-Path -LiteralPath (Join-Path $fresh 'portable/InstallMedia.ps1'))){throw 'Optional media setup is missing.'}
 $created=Invoke-Film @{version=1;operation='create';request_id='fresh-create';payload=@{title='FRESH EXTRACTION SYNTHETIC FIXTURE'}}
 $saved=Invoke-Film @{version=1;operation='shot-add';request_id='fresh-shot';project_id=$created.id;expected_revision=$created.revision;payload=@{}}
 if($saved.project.shots.Count -ne 1){throw 'Fresh shared-interface persistence failed.'}
@@ -37,5 +38,7 @@ $graphRequest=@{root=$fresh;kind='video';request=@{Prompt='Synthetic graph-only 
 $graph=$graphRequest | & (Join-Path $fresh 'app/graph-host/ImageStudio.GraphHost.exe') | ConvertFrom-Json
 if($LASTEXITCODE -ne 0 -or !$graph.ok -or $graph.graph.save.class_type -ne 'SaveVideo'){throw 'Fresh graph host/template/root-resolution failed.'}
 $report=@{fresh_root=$fresh;files_verified=$count;engine_installed=(Test-Path -LiteralPath (Join-Path $fresh 'runtime/ComfyUI_windows_portable'));readiness=$readiness;project=$created.id;graph_host=$true;scope='Real extracted helpers and graph builder; no inference or generated-film quality claim.'}
-$report | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $repo 'temp/film-implementation/evidence/portable-extraction.json')
+$evidence=Join-Path $repo 'temp/film-implementation/evidence'
+New-Item -ItemType Directory -Path $evidence -Force | Out-Null
+$report | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $evidence 'portable-extraction.json')
 $report | ConvertTo-Json -Depth 3

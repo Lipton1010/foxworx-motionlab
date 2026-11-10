@@ -1,5 +1,5 @@
-{
-  "version": "2.2.0",
+﻿{
+  "version": "2.3.0",
   "engine": {
     "path": "downloads/ComfyUI_windows_portable_nvidia.7z",
     "url": "https://github.com/Comfy-Org/ComfyUI/releases/download/v0.42.1/ComfyUI_windows_portable_nvidia.7z",
@@ -10,10 +10,10 @@
     {
       "id": "qwen",
       "title": "Qwen Image 2.1 — images, edits, references",
-      "description": "Recommended starting point. Use 1 megapixel and one reference initially.",
+      "description": "Create or edit images. Begin with 1 megapixel and one reference.",
       "minRamGB": 32,
       "minVramGB": 16,
-      "recommended": true,
+      "recommended": false,
       "licenseUrl": "https://huggingface.co/Qwen/Qwen-Image-2.1/blob/main/LICENSE",
       "bytes": 17283091112,
       "files": [
@@ -35,7 +35,9 @@
           "bytes": 675509688,
           "sha256": "bb21f7473051e1ac368515dd3f2e15cd44d7a11748ee8823e1ddca3e4876b7c9"
         }
-      ]
+      ],
+      "validation": "Setup floor 16 GB VRAM / 32 GB RAM; short smoke tests on RTX 4090 24 GB, partly with constrained headroom. Not a physical 16 GB GPU certification; larger jobs may not fit.",
+      "licenseSummary": "Research/evaluation only unless separately licensed for commercial use."
     },
     {
       "id": "krea",
@@ -65,7 +67,9 @@
           "bytes": 253806246,
           "sha256": "a70580f0213e67967ee9c95f05bb400e8fb08307e017a924bf3441223e023d1f"
         }
-      ]
+      ],
+      "validation": "Setup floor 16 GB VRAM / 32 GB RAM; short smoke tests on RTX 4090 24 GB, partly with constrained headroom. Not a physical 16 GB GPU certification; larger jobs may not fit.",
+      "licenseSummary": "Krea community terms; review use, revenue and redistribution conditions."
     },
     {
       "id": "ltx",
@@ -107,7 +111,9 @@
           "bytes": 995778752,
           "sha256": "eb5a71fe4068ee87ccdb1c3aa635e547ca76bd2d30ae20ae889f2c325c0677e8"
         }
-      ]
+      ],
+      "validation": "Setup floor 16 GB VRAM / 32 GB RAM; short smoke tests on RTX 4090 24 GB, partly with constrained headroom. Not a physical 16 GB GPU certification; larger jobs may not fit.",
+      "licenseSummary": "LTX community terms plus component terms; review commercial and redistribution conditions."
     },
     {
       "id": "minimax",
@@ -143,7 +149,9 @@
           "bytes": 605254808,
           "sha256": "8e505d95dd1561d47abd43d4238fd40d9bb1ae9e147ed0a4cba778d76ae4db48"
         }
-      ]
+      ],
+      "validation": "Setup floor 16 GB VRAM / 32 GB RAM; short smoke tests on RTX 4090 24 GB, partly with constrained headroom. Not a physical 16 GB GPU certification; larger jobs may not fit.",
+      "licenseSummary": "MiniMax H3 community terms plus component terms; review permitted uses."
     },
     {
       "id": "moss",
@@ -263,62 +271,148 @@
           "bytes": 249521372,
           "sha256": "c3bdf94dc67ec69b30ea9fe1fa8340085679cae64d019f7c7e4a9921f1a7f17a"
         }
+      ],
+      "validation": "Setup floor 16 GB VRAM / 32 GB RAM; short smoke tests on RTX 4090 24 GB, partly with constrained headroom. Not a physical 16 GB GPU certification; larger jobs may not fit.",
+      "licenseSummary": "Model card identifies Apache 2.0; retain notices and check component licenses."
+    },
+    {
+      "id": "refiner-4b",
+      "title": "Qwen3.5 4B optional prompt refiner",
+      "description": "Text and image-aware refinement with generation-model-specific profiles. Runs alone before generation.",
+      "minRamGB": 16,
+      "minVramGB": 8,
+      "minFreeVramGB": 6,
+      "recommended": false,
+      "licenseUrl": "https://huggingface.co/Qwen/Qwen3.5-4B/resolve/851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a/LICENSE",
+      "licenseSummary": "Original weights: Apache-2.0. Independent Unsloth Q4 conversion; llama.cpp MIT and CUDA component terms apply. Does not change generator weight restrictions.",
+      "validation": "Conservative admission estimates, not certified minimums. Bounded synthetic text and one-image tests passed on RTX 4090 24 GB with llama.cpp b11146; sampled whole-board peak 5713 MiB, baseline about 1655 MiB. Cancellation released the owned runtime. Larger references/contexts and smaller physical GPUs remain unvalidated.",
+      "bytes": 4058772603,
+      "files": [
+        {
+          "path": "models/prompt-refiner/4b/Qwen3.5-4B-Q4_K_M.gguf",
+          "url": "https://huggingface.co/unsloth/Qwen3.5-4B-GGUF/resolve/e87f176479d0855a907a41277aca2f8ee7a09523/Qwen3.5-4B-Q4_K_M.gguf",
+          "bytes": 2740937888,
+          "sha256": "00fe7986ff5f6b463e62455821146049db6f9313603938a70800d1fb69ef11a4",
+          "role": "model"
+        },
+        {
+          "path": "models/prompt-refiner/4b/mmproj-F16.gguf",
+          "url": "https://huggingface.co/unsloth/Qwen3.5-4B-GGUF/resolve/e87f176479d0855a907a41277aca2f8ee7a09523/mmproj-F16.gguf",
+          "bytes": 672423616,
+          "sha256": "cd88edcf8d031894960bb0c9c5b9b7e1fea6ebee02b9f7ce925a00d12891f864",
+          "role": "projector"
+        },
+        {
+          "path": "downloads/qwen35/llama-b11146-bin-win-cuda-12.4-x64.zip",
+          "url": "https://github.com/ggml-org/llama.cpp/releases/download/b11146/llama-b11146-bin-win-cuda-12.4-x64.zip",
+          "bytes": 253869799,
+          "sha256": "3c806a6ceccc3dae1c743ceb1a1fb2cce5b76f40bfbd4c6b7b8afb6ef45a5807",
+          "extractTo": "runtime/llama-qwen35"
+        },
+        {
+          "path": "downloads/qwen35/cudart-llama-bin-win-cuda-12.4-x64.zip",
+          "url": "https://github.com/ggml-org/llama.cpp/releases/download/b11146/cudart-llama-bin-win-cuda-12.4-x64.zip",
+          "bytes": 391443627,
+          "sha256": "8c79a9b226de4b3cacfd1f83d24f962d0773be79f1e7b75c6af4ded7e32ae1d6",
+          "extractTo": "runtime/llama-qwen35"
+        },
+        {
+          "path": "models/prompt-refiner/4b/LICENSE",
+          "url": "https://huggingface.co/Qwen/Qwen3.5-4B/resolve/851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a/LICENSE",
+          "bytes": 11544,
+          "sha256": "bbedc3fda3305820b977265f01b8619d87570a6739de3a5582c3464840f1e57a",
+          "role": "license"
+        },
+        {
+          "path": "runtime/llama-qwen35/LICENSE-llama.txt",
+          "url": "https://raw.githubusercontent.com/ggml-org/llama.cpp/7fe450e19305b828c199d602c23a8337aaa1f03b/LICENSE",
+          "bytes": 1078,
+          "sha256": "94f29bbed6a22c35b992c5c6ebf0e7c92f13b836b90f36f461c9cf2f0f1d010d",
+          "role": "license"
+        },
+        {
+          "path": "runtime/llama-qwen35/NVIDIA-CUDA-12.4.1-EULA.html",
+          "url": "https://docs.nvidia.com/cuda/archive/12.4.1/eula/index.html",
+          "bytes": 85051,
+          "sha256": "c0e213c4c53fbc9b29dc3e8cea0fb06b0498a28eca01858d3611d975dd70f585",
+          "role": "license"
+        }
+      ],
+      "refinerTier": "4b",
+      "modelRevision": "e87f176479d0855a907a41277aca2f8ee7a09523",
+      "additionalLicenseUrls": [
+        "https://raw.githubusercontent.com/ggml-org/llama.cpp/7fe450e19305b828c199d602c23a8337aaa1f03b/LICENSE",
+        "https://docs.nvidia.com/cuda/archive/12.4.1/eula/index.html"
       ]
     },
     {
-      "id": "rewriters",
-      "title": "Local AI prompt refinement",
-      "description": "Optional text and image-aware refinement. Needs 10 GB of free VRAM while it runs.",
-      "minRamGB": 32,
-      "minVramGB": 16,
+      "id": "refiner-9b",
+      "title": "Qwen3.5 9B optional prompt refiner",
+      "description": "Text and image-aware refinement with generation-model-specific profiles. Runs alone before generation.",
+      "minRamGB": 24,
+      "minVramGB": 12,
+      "minFreeVramGB": 10,
       "recommended": false,
-      "licenseUrl": "https://huggingface.co/Qwen/Qwen-Image-2.1-PE-T2I",
-      "bytes": 14503183603,
+      "licenseUrl": "https://huggingface.co/Qwen/Qwen3.5-9B/resolve/c202236235762e1c871ad0ccb60c8ee5ba337b9a/LICENSE",
+      "licenseSummary": "Original weights: Apache-2.0. Independent Unsloth Q4 conversion; llama.cpp MIT and CUDA component terms apply. Does not change generator weight restrictions.",
+      "validation": "Conservative admission estimates, not measured minimums. Exact model/projector/runtime combination has not had an inference smoke test. Context limited to 8192; memory depends on references.",
+      "bytes": 7244099643,
       "files": [
         {
-          "path": "models/prompt-rewriters/gguf/Qwen-Image-2.1-PE-T2I.Q5_K_M.gguf",
-          "url": "https://huggingface.co/prithivMLmods/Qwen-Image-2.1-PE-T2I-GGUF/resolve/e18d4a3e0830ab157770738b16830e6fcf5f57d4/Qwen-Image-2.1-PE-T2I.Q5_K_M.gguf",
-          "bytes": 6467969664,
-          "sha256": "749f5652fd6e8b760ca860091f7a5bffa254a7954203ae5c9bcdf5f93197702f"
+          "path": "models/prompt-refiner/9b/Qwen3.5-9B-Q4_K_M.gguf",
+          "url": "https://huggingface.co/unsloth/Qwen3.5-9B-GGUF/resolve/3885219b6810b007914f3a7950a8d1b469d598a5/Qwen3.5-9B-Q4_K_M.gguf",
+          "bytes": 5680522464,
+          "sha256": "03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8",
+          "role": "model"
         },
         {
-          "path": "models/prompt-rewriters/t2i/system_prompt.txt",
-          "url": "https://huggingface.co/Qwen/Qwen-Image-2.1-PE-T2I/resolve/f3ed7985c788ad75b3ab7223e0c4c51e2a43545b/system_prompt.txt",
-          "bytes": 10045,
-          "sha256": "a77c9a06c59b120741141d9514b95682bb8761d02bec49ca61def7b2b3d9fb99"
+          "path": "models/prompt-refiner/9b/mmproj-F16.gguf",
+          "url": "https://huggingface.co/unsloth/Qwen3.5-9B-GGUF/resolve/3885219b6810b007914f3a7950a8d1b469d598a5/mmproj-F16.gguf",
+          "bytes": 918166080,
+          "sha256": "f70dc3509053962b0d0d3ee8a7eacebf5d60aa560cad78254ae8698516ae029f",
+          "role": "projector"
         },
         {
-          "path": "models/prompt-rewriters/gguf/Qwen-Image-2.1-PE-I2I.Q5_K_M.gguf",
-          "url": "https://huggingface.co/prithivMLmods/Qwen-Image-2.1-PE-I2I-GGUF/resolve/55b9c1a326599e142d59bcad8715d5601ccf8daa/Qwen-Image-2.1-PE-I2I.Q5_K_M.gguf",
-          "bytes": 6467969664,
-          "sha256": "cb71f71fe5fe5938570d65a7c403fbcb1a9065dff9dd9a021f58aec42785b84e"
+          "path": "downloads/qwen35/llama-b11146-bin-win-cuda-12.4-x64.zip",
+          "url": "https://github.com/ggml-org/llama.cpp/releases/download/b11146/llama-b11146-bin-win-cuda-12.4-x64.zip",
+          "bytes": 253869799,
+          "sha256": "3c806a6ceccc3dae1c743ceb1a1fb2cce5b76f40bfbd4c6b7b8afb6ef45a5807",
+          "extractTo": "runtime/llama-qwen35"
         },
         {
-          "path": "models/prompt-rewriters/gguf/Qwen-Image-2.1-PE-I2I.mmproj-bf16.gguf",
-          "url": "https://huggingface.co/prithivMLmods/Qwen-Image-2.1-PE-I2I-GGUF/resolve/55b9c1a326599e142d59bcad8715d5601ccf8daa/Qwen-Image-2.1-PE-I2I.mmproj-bf16.gguf",
-          "bytes": 921704608,
-          "sha256": "8dedb71dbc3092dc47de9108ad373d68a12854e2527d59bd9399601738f3bce1"
-        },
-        {
-          "path": "models/prompt-rewriters/edit/system_prompt.txt",
-          "url": "https://huggingface.co/Qwen/Qwen-Image-2.1-PE-I2I/resolve/72927bc08afc99b7888ceb7d7d51a12db3700bbd/system_prompt.txt",
-          "bytes": 18344,
-          "sha256": "e378fea686a1431581ba4c654d332ae96adad633f144ae738ec8ce9c4fd66439"
-        },
-        {
-          "path": "downloads/llama-b10964-bin-win-cuda-12.4-x64.zip",
-          "url": "https://github.com/ggml-org/llama.cpp/releases/download/b10964/llama-b10964-bin-win-cuda-12.4-x64.zip",
-          "bytes": 254067651,
-          "sha256": "264f20d7ee3860aecca9ec12418357a9f3e80349a2b186f66c63859ded1a9593",
-          "extractTo": "runtime/llama"
-        },
-        {
-          "path": "downloads/cudart-llama-bin-win-cuda-12.4-x64.zip",
-          "url": "https://github.com/ggml-org/llama.cpp/releases/download/b10964/cudart-llama-bin-win-cuda-12.4-x64.zip",
+          "path": "downloads/qwen35/cudart-llama-bin-win-cuda-12.4-x64.zip",
+          "url": "https://github.com/ggml-org/llama.cpp/releases/download/b11146/cudart-llama-bin-win-cuda-12.4-x64.zip",
           "bytes": 391443627,
           "sha256": "8c79a9b226de4b3cacfd1f83d24f962d0773be79f1e7b75c6af4ded7e32ae1d6",
-          "extractTo": "runtime/llama"
+          "extractTo": "runtime/llama-qwen35"
+        },
+        {
+          "path": "models/prompt-refiner/9b/LICENSE",
+          "url": "https://huggingface.co/Qwen/Qwen3.5-9B/resolve/c202236235762e1c871ad0ccb60c8ee5ba337b9a/LICENSE",
+          "bytes": 11544,
+          "sha256": "bbedc3fda3305820b977265f01b8619d87570a6739de3a5582c3464840f1e57a",
+          "role": "license"
+        },
+        {
+          "path": "runtime/llama-qwen35/LICENSE-llama.txt",
+          "url": "https://raw.githubusercontent.com/ggml-org/llama.cpp/7fe450e19305b828c199d602c23a8337aaa1f03b/LICENSE",
+          "bytes": 1078,
+          "sha256": "94f29bbed6a22c35b992c5c6ebf0e7c92f13b836b90f36f461c9cf2f0f1d010d",
+          "role": "license"
+        },
+        {
+          "path": "runtime/llama-qwen35/NVIDIA-CUDA-12.4.1-EULA.html",
+          "url": "https://docs.nvidia.com/cuda/archive/12.4.1/eula/index.html",
+          "bytes": 85051,
+          "sha256": "c0e213c4c53fbc9b29dc3e8cea0fb06b0498a28eca01858d3611d975dd70f585",
+          "role": "license"
         }
+      ],
+      "refinerTier": "9b",
+      "modelRevision": "3885219b6810b007914f3a7950a8d1b469d598a5",
+      "additionalLicenseUrls": [
+        "https://raw.githubusercontent.com/ggml-org/llama.cpp/7fe450e19305b828c199d602c23a8337aaa1f03b/LICENSE",
+        "https://docs.nvidia.com/cuda/archive/12.4.1/eula/index.html"
       ]
     }
   ]

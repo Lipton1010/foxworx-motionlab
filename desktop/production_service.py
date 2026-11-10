@@ -16,6 +16,7 @@ import production_jobs as jobs
 import production_project as project
 
 PROTOCOL = 1
+MEDIA_SETUP_HELP = ' Open Setup > Media tools for an optional verified upstream download, or configure your own FFmpeg/FFprobe paths in user/production-tools.json.'
 
 
 def tools(studio):
@@ -140,7 +141,7 @@ def handle(studio, request):
         jobs.file_hash(source, asset['sha256'])
         paths = tools(studio)
         if not all(paths.values()):
-            raise project.ProjectError('unavailable', 'Configure FFmpeg and FFprobe for lazy media inspection')
+            raise project.ProjectError('unavailable', 'Configure FFmpeg and FFprobe for lazy media inspection' + MEDIA_SETUP_HELP)
         cached = root / 'display-cache' / asset['sha256']
         cached.mkdir(parents=True, exist_ok=True)
         info = edit.probe(source, paths['ffprobe'])
@@ -215,7 +216,7 @@ def handle(studio, request):
         value = project.snapshot(root)
         paths = tools(studio)
         if not all(paths.values()):
-            raise project.ProjectError('unavailable', 'Configure FFmpeg / FFprobe before binding real repair anchors')
+            raise project.ProjectError('unavailable', 'Configure FFmpeg / FFprobe before binding real repair anchors' + MEDIA_SETUP_HELP)
         record = repair.prepare(root, value, data, paths)
         locator = root / 'repair-inputs' / record['id'] / 'repair.json'
         proposal = dict(kind='video', request=record['request'], name='repair-' + request_id, shot=data['shot'],
@@ -433,7 +434,7 @@ def handle(studio, request):
             row['staging'] = data.get('staging', '')
             tool = tools(studio)['ffmpeg']
             if not tool:
-                raise project.ProjectError('unavailable', 'Configure FFmpeg for exact cut frame evidence')
+                raise project.ProjectError('unavailable', 'Configure FFmpeg for exact cut frame evidence' + MEDIA_SETUP_HELP)
             for side, number in (('before', frame-1), ('after', frame)):
                 image = root / 'observations' / (request_id + '-' + side + '.png')
                 edit.run([tool, '-nostdin', '-v', 'error', '-i', artifact, '-vf', 'select=eq(n\\,' + str(number) + ')', '-frames:v', '1', image], 60)
@@ -529,7 +530,7 @@ def handle(studio, request):
             raise project.ProjectError('conflict', 'Reload the current edit before rendering')
         tool_paths = tools(studio)
         if not all(tool_paths.values()):
-            raise project.ProjectError('unavailable', 'Configure FFmpeg and FFprobe in user/production-tools.json')
+            raise project.ProjectError('unavailable', 'Configure FFmpeg and FFprobe in user/production-tools.json' + MEDIA_SETUP_HELP)
         destination = root / 'cuts' / (request_id + '.mp4')
         receipt_path = root / 'cuts' / (request_id + '.receipt.json')
         if receipt_path.exists():
@@ -578,7 +579,7 @@ def handle(studio, request):
         record['audio_channels'] = 2
         tool = tools(studio)['ffmpeg']
         if not tool:
-            raise project.ProjectError('unavailable', 'Configure FFmpeg to bind transcript to decoded current audio')
+            raise project.ProjectError('unavailable', 'Configure FFmpeg to bind transcript to decoded current audio' + MEDIA_SETUP_HELP)
         decoded = root / 'transcripts' / (request_id + '.pcm')
         decoded.parent.mkdir(exist_ok=True)
         edit.run([tool, '-nostdin', '-v', 'error', '-i', jobs.confined(root, audio['path']), '-map', '0:a:0',
@@ -625,7 +626,7 @@ def handle(studio, request):
                 jobs.file_hash(path, asset['sha256'])
                 ffprobe = tools(studio)['ffprobe']
                 if not ffprobe:
-                    raise project.ProjectError('unavailable', 'Configure FFprobe before editing source frame ranges')
+                    raise project.ProjectError('unavailable', 'Configure FFprobe before editing source frame ranges' + MEDIA_SETUP_HELP)
                 fps = data['edit']['fps'] if operation == 'edit-replace' else current['edit']['fps']
                 checked[asset['sha256']] = edit.validate_cfr(path, fps, ffprobe)
             if segment['out_frame'] > checked[asset['sha256']]:
@@ -639,7 +640,7 @@ def handle(studio, request):
         jobs.file_hash(source, asset['sha256'])
         ffprobe = tools(studio)['ffprobe']
         if not ffprobe:
-            raise project.ProjectError('unavailable', 'Configure FFprobe before selecting an exact source range')
+            raise project.ProjectError('unavailable', 'Configure FFprobe before selecting an exact source range' + MEDIA_SETUP_HELP)
         info = edit.probe(source, ffprobe)
         video = next((s for s in info['streams'] if s['codec_type'] == 'video'), None)
         if not video or data['out_frame'] > float(video.get('duration', info['format'].get('duration', 0))) * float(edit.Fraction(video['avg_frame_rate'])) + .01:

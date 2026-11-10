@@ -2,32 +2,34 @@
 <html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Image Studio — Start here</title>
 <style>body{font:16px/1.6 'Segoe UI',sans-serif;color:#17253b;background:#f5f7fb;max-width:850px;margin:48px auto;padding:0 24px}h1{font-size:34px;line-height:1.2}h2{margin-top:32px;font-size:23px}li{margin:10px 0}table{border-collapse:collapse;width:100%;background:white}th,td{text-align:left;vertical-align:top;padding:12px;border:1px solid #d5dde8}a{color:#155bc0}code{background:#e8edf4;padding:2px 5px;border-radius:4px}.note{padding:18px;background:#e8effb;border-radius:10px}</style>
-<h1>Image Studio 2.2</h1>
+<h1>FoxWorx MotionLab release candidate</h1>
 <p>Local image and video creation for Windows. Your prompts, references, and generated files stay on your computer.</p>
 <h2>Get started</h2>
 <ol>
 <li>Extract the entire package to a local folder such as <code>C:\Image Studio</code>. Keep the folders together. Avoid Program Files, network drives, and cloud-synced folders.</li>
-<li>Run <strong>Setup.cmd</strong>. It detects your GPU and RAM, then lets you choose the models you want. Qwen is the suggested first download. Read each model's license before using it.</li>
+<li>Run <strong>Setup.cmd</strong>. It detects your GPU and RAM, then lets you choose the models you want. No model is selected automatically. Keep core-only mode for planning/imported media without GPU downloads. Read each model's license before using it.</li>
 <li>Click <strong>Install selected</strong>. The engine is about 2 GB, plus the models below. Downloads are checked against pinned SHA-256 checksums. If interrupted, run Setup again to resume.</li>
 <li>Open <strong>Start Image Studio.cmd</strong>. Choose a model, write a description, and click Generate. Start with <strong>1 megapixel</strong>, one reference, or a <strong>3-second</strong> video.</li>
 </ol>
-<p class="note"><strong>For a 4090 laptop with 16 GB VRAM and 32 GB RAM:</strong> use AC power, close games and other GPU applications, and keep Windows' page file system-managed. A current NVIDIA driver is required; this package checks for 580.88 or newer. The CUDA toolkit is included with the engine, so it does not need a separate installation.</p>
+<p class="note"><strong>Hardware estimates, not certified minimums:</strong> Prior generation tests used a desktop RTX 4090 24 GB, sometimes with constrained headroom. They do not certify a physical 16 GB laptop. For NVIDIA generation, use AC power, close games and other GPU applications, and keep Windows' page file system-managed. A current NVIDIA driver is required; this package checks for 580.88 or newer. The CUDA toolkit is included with the engine, so it does not need a separate installation.</p>
 <h2>Choose your downloads</h2>
 <p>The sizes below are downloads in decimal GB, separate from the engine. Keep at least another 20 GiB free for extraction and working space. Setup checks remaining space before downloading.</p>
 <table><thead><tr><th>Choice</th><th>Download</th><th>Use</th></tr></thead><tbody>
-<tr><td>Qwen Image 2.1</td><td>17.3 GB</td><td>Recommended first. Create images, edit an image, and use references. <a href="https://huggingface.co/Qwen/Qwen-Image-2.1/blob/main/LICENSE">Research license</a>.</td></tr>
+<tr><td>Qwen Image 2.1</td><td>17.3 GB</td><td>Create images, edit an image, and use references. <a href="https://huggingface.co/Qwen/Qwen-Image-2.1/blob/main/LICENSE">Research license</a>.</td></tr>
 <tr><td>Krea 2 Raw</td><td>18.6 GB</td><td>Optional text-to-image model; supports compatible LoRAs. <a href="https://huggingface.co/krea/Krea-2-Raw">Model and license</a>.</td></tr>
 <tr><td>LTX 2.5</td><td>39.7 GB</td><td>Text or image to short video with audio. More demanding; begin with 3 seconds. <a href="https://huggingface.co/Lightricks/LTX-2.5">Model and license</a>.</td></tr>
-<tr><td>Local prompt refinement</td><td>14.5 GB</td><td>Optional text and image-aware prompt rewriting. Requires 10 GB of free VRAM while running. <a href="https://huggingface.co/Qwen/Qwen-Image-2.1-PE-T2I">Model and license</a>.</td></tr>
+<tr><td>Qwen3.5 4B refinement</td><td>4.1 GB</td><td>Optional text and image-aware refiner. Estimated admission: 8 GB total / 6 GiB free VRAM, 16 GB RAM. Not benchmark-certified. <a href="https://huggingface.co/Qwen/Qwen3.5-4B/blob/main/LICENSE">Apache-2.0 weights</a>.</td></tr>
+<tr><td>Qwen3.5 9B refinement</td><td>7.2 GB</td><td>Higher-memory optional refiner. Estimated admission: 12 GB total / 10 GiB free VRAM, 24 GB RAM. Untested here. <a href="https://huggingface.co/Qwen/Qwen3.5-9B/blob/main/LICENSE">Apache-2.0 weights</a>.</td></tr>
 <tr><td>MOSS Image Base</td><td>27.2 GB</td><td>Larger image model. Setup checks memory requirements before offering it. <a href="https://huggingface.co/OpenMOSS-Team/MOSS-Image-Base">Model and license</a>.</td></tr>
 <tr><td>MiniMax H3</td><td>42.5 GB</td><td>Larger video model. Setup checks memory requirements before offering it. <a href="https://huggingface.co/Comfy-Org/MiniMax-H3">Model and license</a>.</td></tr>
 </tbody></table>
+<p>Generator setup floors are provisionally 16 GB VRAM / 32 GB RAM; larger jobs can exceed them. Setup lists total/free memory and per-model caveats. Refiner package sizes include a shared runtime, reused when installing both tiers. Free disk and memory are rechecked before downloads. See PROMPT REFINEMENT.txt for supported local modes and profile customization.</p>
 <h2>Using the app</h2>
 <ul>
 <li><strong>Still images:</strong> choose a model and prompt. Qwen supports editing; put the main image first in References, or use Edit this image.</li>
 <li><strong>Videos:</strong> choose From text or From image. Animate uses the current image as the first frame. Play, pause, seek, export, or import clips.</li>
 <li><strong>References:</strong> add up to ten images, assign roles and notes, and reorder them. Save set makes copies; keep the JSON and its matching .images folder together.</li>
-<li><strong>Prompt Builder:</strong> choose Image or Video. Video prompts include movement, camera direction, pacing, and sound, with actions for text-to-video or image-to-video. Choose duration and a first frame in Videos. Written image and video prompts are saved separately. Image prompts also support optional local AI refinement and Undo. Building or transferring a prompt does not start generation.</li>
+<li><strong>Prompt Builder:</strong> choose Image or Video. Video prompts include movement, camera direction, pacing, and sound, with actions for text-to-video or image-to-video. Choose duration and a first frame in Videos. Written image and video prompts are saved separately. Both image and video drafts support optional Qwen3.5 refinement using the selected generation model profile, plus Undo. Building or transferring a prompt does not start generation.</li>
 <li><strong>Models &amp; LoRAs:</strong> use Download models to add models later. Put compatible LoRAs in models/loras, then Refresh library. Set strength and enable each LoRA separately.</li>
 <li><strong>Saved work:</strong> generations are in <code>output</code>, with prompt/settings JSON beside them. Delete image and Delete video ask for confirmation, then remove the actual media and metadata from that folder into the Windows Recycle Bin. Imported videos are copies; the original import source stays intact.</li>
 <li><strong>Cancel/reopen:</strong> cancellation targets this app's job. Closing during a generation can leave it running; reopening reconnects. To release GPU memory after use, close the app and run Stop Image Studio.cmd when the queue is idle.</li>

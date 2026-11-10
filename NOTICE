@@ -1,0 +1,17 @@
+FoxWorx MotionLab
+Copyright 2026 Foxworx and contributors.
+
+Original application code is licensed under Apache License 2.0 (LICENSE).
+Third-party components and optional models retain their own licenses. This
+license does not grant rights to model weights, voices, input media, generated
+content, trademarks, or other third-party material.
+
+Bundled components include Microsoft .NET/Windows Desktop, embedded CPython,
+7-Zip 26.01 (LGPL-2.1-or-later, BSD and unRAR restrictions), and the MOSS-Image
+plugin (Apache-2.0). See licenses/ in the distribution and the MOSS plugin's
+LICENSE. The unmodified matching 7-Zip source archive is included as
+licenses/7z2601-src.7z with LGPL-2.1.txt and 7-Zip.txt.
+
+ComfyUI, FFmpeg, llama.cpp/CUDA and model weights are separate optional
+downloads. Their notices, restrictions and hardware requirements are shown
+before installation. Apache-2.0 for this app does not override those terms.
