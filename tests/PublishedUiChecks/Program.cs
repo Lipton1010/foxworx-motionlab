@@ -9,6 +9,12 @@ internal static class Program
 {
     [DllImport("user32.dll")]
     private static extern bool PostMessage(IntPtr window, uint message, IntPtr key, IntPtr data);
+    [DllImport("user32.dll")]
+    private static extern bool SetForegroundWindow(IntPtr window);
+    [DllImport("user32.dll")]
+    private static extern IntPtr GetForegroundWindow();
+    [DllImport("user32.dll")]
+    private static extern void keybd_event(byte key, byte scan, uint flags, UIntPtr extra);
     [DllImport("dwmapi.dll")]
     private static extern int DwmGetWindowAttribute(IntPtr window, int attribute, out int value, int size);
     [STAThread]
@@ -39,7 +45,7 @@ internal static class Program
                 ?? throw new IOException("Missing published control: " + name);
             void Click(string name) => ((InvokePattern)Find(name, ControlType.Button).GetCurrentPattern(InvokePattern.Pattern)).Invoke();
             void SelectTab(string name) => ((SelectionItemPattern)Find(name, ControlType.TabItem).GetCurrentPattern(SelectionItemPattern.Pattern)).Select();
-            Check(window.Current.Name == "Image Studio", "Fresh extracted self-contained executable creates the real WPF window");
+            Check(window.Current.Name == "FoxWorx MotionLab", "Fresh extracted executable has the FoxWorx MotionLab native window title");
             Check(DwmGetWindowAttribute(process.MainWindowHandle, 20, out int darkTitle, sizeof(int)) == 0 && darkTitle == 1, "Published app applies its default Dark native title-bar attribute");
             if (pilot)
             {
@@ -113,11 +119,15 @@ internal static class Program
             ((ExpandCollapsePattern)appearance.GetCurrentPattern(ExpandCollapsePattern.Pattern)).Expand(); await Task.Delay(200);
             var light = AutomationElement.RootElement.FindFirst(TreeScope.Descendants, new AndCondition(new PropertyCondition(AutomationElement.ProcessIdProperty, process.Id), new PropertyCondition(AutomationElement.NameProperty, "Light"), new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.ListItem)));
             if (light == null) throw new IOException("Published appearance popup did not expose Light.");
+            ((ExpandCollapsePattern)appearance.GetCurrentPattern(ExpandCollapsePattern.Pattern)).Collapse();
+            SetForegroundWindow(process.MainWindowHandle);
             appearance.SetFocus();
-            foreach (int key in new[] { 0x24, 0x28, 0x0D })
+            await Task.Delay(100);
+            foreach (byte key in new byte[] { 0x24, 0x28, 0x0D })
             {
-                PostMessage(process.MainWindowHandle, 0x0100, new IntPtr(key), IntPtr.Zero);
-                PostMessage(process.MainWindowHandle, 0x0101, new IntPtr(key), IntPtr.Zero);
+                if (GetForegroundWindow() != process.MainWindowHandle) throw new IOException("Test window lost focus; refusing global key input.");
+                keybd_event(key, 0, 0, UIntPtr.Zero);
+                keybd_event(key, 0, 2, UIntPtr.Zero);
                 await Task.Delay(100);
             }
             await Task.Delay(300);

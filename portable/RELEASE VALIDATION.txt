@@ -51,3 +51,17 @@ Current checks: 98 portable checks, 13 media checks, 86 Python tests run
 (81 passed, 5 skipped), 35 real-control UI checks, 113 graph/workflow checks.
 A base Python run lacked Torch; the full Python rerun used the existing Torch
 runtime with GPU disabled. Final candidate archive tests are recorded separately.
+
+Exact beta artifact validation, 2026-11-10:
+The unsigned self-extractor was extracted to a fresh isolated Alpha folder;
+896 package files matched the embedded SHA256SUMS. The packaged embedded Python,
+film project persistence and real graph host passed. All six native packaged UI
+checks passed, including FoxWorx MotionLab window title, film/shot persistence,
+and Dark-to-Light appearance persistence/native title bar. The earlier synthetic
+PostMessage/UIA selection attempts were test automation failures; normal guarded
+keyboard input exercised the real combo box successfully.
+This remains an experimental beta, not a pristine Windows VM, physical small-GPU,
+or complete generation/long-film certification. Existing user folders, jobs and
+production installations were not modified. Use a new extraction folder and
+review Setup before optional downloads. No engine, model weights or FFmpeg are
+bundled; independent model/vendor terms and notices remain applicable.
